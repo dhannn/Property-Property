@@ -1,0 +1,101 @@
+[ / ] 1 pomodoro
+[ / ] 2 pomodoros
+[ / ] 3 pomodoros
+[ / ] 4 pomodoros
+[ / ] 5 pomodoros
+[ / ] 6 pomodoros
+[ / ] 7 pomodoros
+[ / ] 8 pomodoros
+[ / ] 9 pomodoros
+[ / ] 10 pomodoros
+
+[ / ] 11 pomodoros
+[ / ] 12 pomodoros
+[ ] 13 pomodoros
+[ ] 14 pomodoros
+
+[ ] 15 pomodoros
+[ ] 16 pomodoros
+[ ] 17 pomodoros
+[ ] 18 pomodoros
+[ ] 19 pomodoros
+[ ] 20 pomodoros
+
+
+    player.cash = 0;
+    player.position->current = 6;
+    player.index = 0;
+    player.ownedProperties = malloc(sizeof(Property) * 2);
+    player.ownedProperties->position = -1;
+
+
+    
+
+    // switch(dice){
+    //     case 0: 
+    //         for(i = 0; i < 5; i++){
+    //             reposition(10 + i, 80);
+    //             printf("          ");
+    //         }
+    //         break;
+    //     case 1:
+    //         for(i = 0; i < 4; i++){
+    //             reposition(origin.y + i, origin.x);
+    //             printf(diceMatrix[0][i]);
+    //         }
+
+    //         // reposition(11, 80);
+    //         // printf(DICE_R1_NONE);
+    //         // reposition(12, 80);
+    //         // printf(DICE_R2_ONE);
+    //         // reposition(13, 80);
+    //         // printf(DICE_R3_NONE);
+    //         break;
+    //     case 2:
+    //         for(i = 0; i < 4; i++){
+    //             reposition(origin.y + i, origin.x);
+    //             printf(diceMatrix[1][i]);
+    //         }
+
+    //         // reposition(11, 80);
+    //         // printf(DICE_R1_ONE);
+    //         // reposition(12, 80);
+    //         // printf(DICE_R2_NONE);
+    //         // reposition(13, 80);
+    //         // printf(DICE_R3_ONE);
+    //         break;
+    //     case 3:
+    //         // reposition(11, 80);
+    //         // printf(DICE_R1_ONE);
+    //         // reposition(12, 80);
+    //         // printf(DICE_R2_ONE);
+    //         // reposition(13, 80);
+    //         // printf(DICE_R3_ONE);
+    //         break;
+    //     case 4:
+    //         reposition(11, 80);
+    //         printf(DICE_R1_TWO);
+    //         reposition(12, 80);
+    //         printf(DICE_R2_NONE);
+    //         reposition(13, 80);
+    //         printf(DICE_R3_TWO);
+    //         break;
+    //     case 5:
+    //         reposition(11, 80);
+    //         printf(DICE_R1_TWO);
+    //         reposition(12, 80);
+    //         printf(DICE_R2_ONE);
+    //         reposition(13, 80);
+    //         printf(DICE_R3_TWO);
+    //         break;
+    //     case 6:
+    //         reposition(11, 80);
+    //         printf(DICE_R1_TWO);
+    //         reposition(12, 80);
+    //         printf(DICE_R2_TWO);
+    //         reposition(13, 80);
+    //         printf(DICE_R3_TWO);
+    //         break;
+
+    // }
+}
