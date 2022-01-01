@@ -2,15 +2,15 @@
 [ / ] 2 pomodoros
 [ / ] 3 pomodoros
 [ / ] 4 pomodoros
-[ / ] 5 pomodoros
-[ / ] 6 pomodoros
-[ / ] 7 pomodoros
-[ / ] 8 pomodoros
-[ / ] 9 pomodoros
-[ / ] 10 pomodoros
+[ ] 5 pomodoros
+[ ] 6 pomodoros
+[ ] 7 pomodoros
+[ ] 8 pomodoros
+[ ] 9 pomodoros
+[ ] 10 pomodoros
 
-[ / ] 11 pomodoros
-[ / ] 12 pomodoros
+[ ] 11 pomodoros
+[ ] 12 pomodoros
 [ ] 13 pomodoros
 [ ] 14 pomodoros
 

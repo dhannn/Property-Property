@@ -5,7 +5,7 @@
 
 void initializeGame(Game *game){
     int i;
-    srand(1);
+    srand(13);
 
     game->dice = 0;
     game->inventory = 0;

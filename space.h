@@ -19,16 +19,6 @@ enum spaceState {
     PROPERTY_IS_RENOVATED       =   0b100000000, // 256d
 };
 
-
-struct space {
-    int position;
-    char name[MAX_CHAR];
-};
-
-// typedef uint8_t position;
-typedef struct space Space;
-typedef struct space Property;
-
 #define GO                  0
 #define TREEHOUSE           1
 #define ELECTRIC_COMPANY    2
@@ -41,8 +31,8 @@ typedef struct space Property;
 #define FARMHOUSE           9
 #endif
 
-void initializeSpace(Space *space);
-char *getSpaceName(Space space);
+// void initializeSpace(Space *space);
+// char *getSpaceName(Space space);
 
 // The following functions are used for getting the state
 int isRenovated(int inventory, int position);

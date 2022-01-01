@@ -39,19 +39,24 @@ int getSpaceState(Player player, int inventory){
     return state;
 }
 
-void getOwnedProperty(Player *player, int inventory){ 
-    int i;
+int *getOwnedProperty(Player player, int inventory){ 
+    int *ownedProperties = malloc(sizeof(int));
     int numOfProperties = 0;
+    int i = 0;
 
-    for(i = 0; i < 10; i++){
-        if(isOwnedByPlayer(inventory, player->position->current, player->index)){
-            player->ownedProperties = realloc(player->ownedProperties, i + 1);
-            player->ownedProperties[numOfProperties]->position = i;
+    for(; i < 10; i++){
+        if(isOwnedByPlayer(inventory, i, player.index)){
+            ownedProperties = realloc(ownedProperties, numOfProperties + 2);
+            ownedProperties[numOfProperties] = i;
 
             numOfProperties++;
         }
     }
-    player->ownedProperties[i]->position = -1;
+
+    ownedProperties = realloc(ownedProperties, numOfProperties + 1);
+    ownedProperties[numOfProperties] = -1;
+
+    return ownedProperties;
 }
 
 float getCost(int position, int inventory, int spaceState, int dice){
@@ -113,10 +118,10 @@ int getOwner(int inventory, int position){
 }
 
 int getPlayerState(Player player, int inventory){
-    Property **ownedProperties = player.ownedProperties;
     int position = player.position->current;
     int cash = player.cash;
     int playerState = 0;
+    
     int spaceState = getSpaceState(player, inventory);
     int cost = getCost(position, inventory, spaceState, 0);
 
@@ -125,7 +130,7 @@ int getPlayerState(Player player, int inventory){
         return -1;
     }
 
-    if(hasProperty(ownedProperties))
+    if(hasProperty(inventory, player.index))
         playerState = playerState | HAS_PROPERTY;
 
     if(isCashSufficient(cash, cost))

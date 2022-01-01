@@ -74,7 +74,7 @@
 #define MOVE_RIGHT "\033[%dC"
 #define MOVE_LEFT "\033[%dD"
 
-#define DEFAULT_DELAY 2000
+#define DEFAULT_DELAY 2500
 
 // COLORS
 #define COLOR_TEMPLATE "\033[%d;%dm"
@@ -174,11 +174,11 @@ void toUpper(char *in);
 /*********          SCREEN FUNCTIONS            *********/
 int getCenterOrigin(int width); // (screen width - text width) / 2 
 void delay(int millisecond);
+void clear();
+void clearLine();
 
 
 /*********  FUNCTIONS ABOUT CURSOR POSITIONING  *********/
-void clear();
-void clearLine();
 void reposition(int row, int column);
 void moveUp(int rowDecrement);
 void moveDown(int rowIncrement);

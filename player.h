@@ -30,7 +30,8 @@ enum playerState{
     And so, naturally, I wanted to try it in this 
     project. Luckily, there is a part in my program
     where I need to refer to previous position 
-    which is a perfect fit for a stack data structure.
+    which is a perfect fit for a stack data structure
+    (I think).
 
     I know a simple "currentPosition" variable, a simple
     "previousPosition" variable and a swapping function
@@ -38,7 +39,7 @@ enum playerState{
     in that? 😅
 */
 typedef struct position{
-    int current;        // may be seen as the top of the stack
+    int current;        // may be seen as the "top" of the stack
     struct position *previous; // pointer to the previous position
 } Position;
 
@@ -48,7 +49,6 @@ struct player{
     float cash;
     Position *position;
     int canPlay;
-    Property **ownedProperties;
 };
 
 typedef struct player Player;
@@ -58,18 +58,72 @@ typedef struct player Player;
 #define COST_MULTIPLIER 2.0
 #endif
 
+/**
+ * This function initializes members of the Player structure.
+ * 
+ * @param player        a pointer to the player being initialized
+ */
 void initializePlayer(Player *player);
+
+/**
+ * This function returns 1 if the player passes the "Go" space and 0 if otherwise.
+ * 
+ * @param position      the position stack that contains the current and 
+ *                      previous positions
+ * @return              boolean values
+ */
 int passesGo(Position position);
 int getPosition(Player player);
+
+/**
+ * This function updates cash by adding or subtracting a specified amount
+ * 
+ * @param cash          a pointer to the cash to be updated
+ * @param amount        the amount to be added or subtracted
+ * @param operation     1 for adding or -1 for subtracting
+ */
 void updateCash(float *cash, float amount, int operation);
 
 // The following deals with the stack data structure of position
+/**
+ * This function initializes the position stack
+ * 
+ * @param new           the initialized value of the current position
+ * @return Position*
+ */
 Position *initializeNewPosition(int new);
-void pushPosition(Position **currentPosition, int newPosition);
+/**
+ * This function pushes a new value to the position stack
+ * 
+ * @param positionStack pointer to the pointer of the stack
+ * @param newPosition   the value to be pushed into the top
+ */
+void pushPosition(Position **positionStack, int newPosition);
+/**
+ * This function recursively deallocates the memory of each element of
+ * the stack until the previous member becomes null.
+ * 
+ * @param position      pointer to the stack being deallocated
+ */
 void deallocatePositions(Position *position);
 
-// The following are used for getting the player state
+/**
+ * This function returns 1 if the cash-in-hand is sufficient 
+ * for a transaction and 0 if otherwise.
+ * 
+ * @param cash          current cash of the player
+ * @param amount        amount needed for the transaction
+ * @return int
+ */
 int isCashSufficient(float cash, float amount);
-int hasProperty(Property **ownedProperties);
+/**
+ * This function returns 1 if the player has at least one property 
+ * and 0 if otherwise.
+ * 
+ * @param inventory     inventory that contains ownership information
+ * @param playerIndex   index of the player to be checked
+ * @return int 
+ */
+int hasProperty(int inventory, int playerIndex);
 
 

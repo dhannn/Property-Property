@@ -169,36 +169,6 @@ Point getOriginPlayerMarker(int position){
     // Point originMatrix[10];
     Point origin;
 
-    // We can represent the origin of a player marker as a piecewise function taking in
-    // the position in the game (from 0 to 9) and.
-
-    /*
-        The following code assigns each position to the origin of the player markers. 
-
-
-        GETTING THE X-VALUE OF THE PLAYER MARKER ---------------------------------------
-        To get the x-value of its origin given the variable <row-value>, we can
-        use the following formula: 
-                    CARD_WIDTH + (CARD_WIDTH + 2) * 2 * <row-value> + 1
-        
-        This formula is derived from our formula in the printSpaceCard() for the
-        origin of the actual card. Recall that formula 
-                            (CARD_WIDTH + 2) * 2 * <row-value> + 1 
-        returns the x-value of the origin of the card. 
-        
-        This explains the latter half of the formula used below. However, we want the 
-        player markers to be in the middle of the card. Thus, we add CARD_WIDTH / 2. 
-        
-        Since for every dash, we add a space (e.g. 3 dashes is added with 3 spaces in 
-        "- - - "), we double the CARD_WIDTH as is CARD_WIDTH * 2 / 2 or just CARD_WIDTH.
-
-        This explains the first term.
-        
-
-        GETTING THE Y-VALUE OF THE PLAYER MARKER ---------------------------------------
-        
-    */
-
     
     origin.x = CARD_WIDTH + (CARD_WIDTH + 2) * 2 * column + 1;
     origin.y = (CARD_HEIGHT + CARD_BORDER_SIZE - CARD_BOTTOM_BORDER) / 2 
@@ -468,7 +438,9 @@ int isValidInput(char *in, int validInputs, va_list args){
      * The second part checks whether the command 
      * (i.e. <BITMASK>) is in the valid inputs 
      * (i.e. validInputs) and this is done through 
-     * bitwise operation.
+     * bitwise operation. 
+     * 
+     * Bitwise AND 
      */
     
     // TODO: deference the var "in" in the parameters

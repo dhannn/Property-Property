@@ -10,20 +10,23 @@ void initializePlayer(Player *player){
     player->cash = 0;
     player->position = initializeNewPosition(0);
     player->cash = INITIAL_CASH;
-    player->ownedProperties = malloc(sizeof(Property));
-    player->ownedProperties[0] = NULL;
 }
 
 void updateCash(float *cash, float amount, int operation){
+    // when operation is SUBTRACT (i.e. -1), the operation of 
+    // the equation turns to subtraction
     *cash = *cash + operation * amount;
 }
 
+int getPosition(Player player){
+    return player.position->current;
+}
 
 int passesGo(Position position){
     int current = position.current;
     int previous = position.previous->current;
 
-    return current < previous;
+    return current <= previous;
 }
 
 /**********************************************************
@@ -42,8 +45,7 @@ Position *initializeNewPosition(int new){
 void pushPosition(Position **positions, int newPosition){
     Position *ptrNewPosition = initializeNewPosition(newPosition);
 
-    // Move the pointer of the current position 
-    // to the "previous" variable 
+    // Move the pointer of the current position to the "previous" variable 
     ptrNewPosition->previous = *positions;
 
     // Move the new position to the "top of the stack"
@@ -51,6 +53,8 @@ void pushPosition(Position **positions, int newPosition){
 }
 
 void deallocatePositions(Position *position){
+    
+    // recursively goes to the previous members to deallocate each nodes
     if(position->previous != NULL){
         deallocatePositions(position->previous);
     }
@@ -66,6 +70,14 @@ int isCashSufficient(float cash, float amount){
     return cash - amount >= 0;
 }
 
-int hasProperty(Property **ownedProperties){
-    return ownedProperties[0] != NULL;
+int hasProperty(int inventory, int playerIndex){
+    int flag = 0;
+    int i;
+
+    for(i = 0; i < 10 && !flag; i++){
+        if(isOwnedByPlayer(inventory, i, playerIndex))
+            flag = 1;
+    }
+
+    return flag;
 }

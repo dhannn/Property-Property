@@ -33,12 +33,39 @@ typedef struct transaction Transaction;
 #define PAY_BANK_RANGE (PAY_BANK_MAX - PAY_BANK_MIN)
 
 void enactTransaction(Player *player, int inventory, Transaction transactionType);
+
+/**
+ * This function updates the current inventory by adding a new status to
+ * a specified position 
+ * 
+ * @param inventory     the inventory that contains ownership details
+ * @param position      position of the digit to be replaced
+ * @param newStatus     the new digit that will replace the original digit
+ */
 void updateInventory(int *inventory, int position, int newStatus);
 float getCost(int position, int inventory, int spaceState, int dice);
+
+
+/**
+ * This function returns the index of the player who owns the property 
+ * in a specified position.
+ * 
+ * @param inventory     the inventory that contains ownership details
+ * @param position      position of property to be checked
+ * @return int 
+ */
 int getOwner(int inventory, int position);
-void getOwnedProperty(Player *player, int inventory);
+
 
 // The following functions are used to get states
+
+/**
+ * This function uses bitwise operation 
+ * 
+ * @param player 
+ * @param inventory 
+ * @return int 
+ */
 int getSpaceState(Player player, int inventory);
 int getPlayerState(Player player, int inventory);
 

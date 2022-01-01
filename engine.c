@@ -53,6 +53,13 @@ void handleInput(char in, Game *game, ...){
             updateInventory(inventory, *position, index + 3);
             printRenovated(*position);
             break;
+        case SELL_KEY:
+            cost = va_arg(args, double);
+            updateCash(&(game->activePlayer->cash), cost, ADD);
+            updateInventory(&(game->inventory), va_arg(args, int), 0);
+            printCash(*cash, index, game->activePlayer->name);
+            display(*game);
+            break;
         case PAY_KEY:
             cost = va_arg(args, double);
             updateCash(cash, cost, SUBTRACT);
@@ -72,6 +79,7 @@ void handleState(Game *game){
     int inventory = game->inventory;
     int *dice = &(game->dice);
     float cost = getCost(position, inventory, state, *dice);
+    int temp;
     char in;
 
     if(passesGo(*(game->activePlayer->position))){
@@ -133,16 +141,19 @@ void handleState(Game *game){
             handleInput(in, game);
         } else if(state & HAS_PROPERTY){
             output("You have no money left! You have to sell your property to pay rent.");
-            in = input("Press the position of your chosen property (1 - Treehouse, ..., 9 - Farmhouse).", DEFAULT | RANGE, 1, 10); 
+            in = input("Press the position of your chosen property (1 - Treehouse, ..., 9 - Farmhouse).", DEFAULT | RANGE, 1, MAX_SPACES); 
             
             while(!isOwnedByPlayer(inventory, atoi(&in), game->activePlayer->index)){
-                in = input("Please select a property you own.", DEFAULT | RANGE, 1, 9);
+                in = input("Please select a property you own.", DEFAULT | RANGE, 1, MAX_SPACES);
             }
 
-            cost = getCost(atoi(&in), inventory, PROPERTY_BY_PLAYER, *dice) / 2.0;
+            cost = getCost(atoi(&in), inventory, PROPERTY_BY_BANK, *dice) / 5.0;
+            temp = atoi(&in);
 
-            updateCash(&(game->activePlayer->cash), cost, ADD);
-            updateInventory(&(game->inventory), atoi(&in), 0);
+            output("The property costs ₱%f.", cost); 
+
+            in = input("Press S to sell this property or X if you want to choose other!", DEFAULT | SELL | X);
+            handleInput(in, game, cost, temp);
 
             getGameState(game);
             handleState(game);
@@ -163,7 +174,10 @@ void playGame(Game *game){
         getGameState(game);
     } while(!game->isBankrupt);
 
-    displayWinner(*(game->activePlayer));
+    if(game->isBankrupt != -1)
+        displayWinner(*(game->activePlayer));
+
+    delay(DEFAULT_DELAY);
 }
 
 void playTurn(Game *game){
