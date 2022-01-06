@@ -4,19 +4,27 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 enum transactionType{
-    GET_FROM_BANK, 
-    PAY_BANK, 
-    BUY_PROPERTY, 
-    RENOVATE_PROPERTY, 
-    PAY_RENT, 
+    NULL_TRANSACTION,
+    GET_BANK_BONUS,
+    GET_FROM_BANK,
+    PAY_BANK,
+    BUY_PROPERTY,
+    RENOVATE_PROPERTY,
+    PAY_RENT,
+    PAY_RENT_RENOVATED,
     SELL_PROPERTY
 };
 
+typedef enum transactionType TransactionType;
+
 struct transaction{
-    float cost;
+    TransactionType transactionType;
+    int amount;
     int operation;
     int newState;
 };
+
+#define DEFAULT_STATE -1
 
 typedef struct transaction Transaction;
 #endif
@@ -32,27 +40,26 @@ typedef struct transaction Transaction;
 #define PAY_BANK_MIN 50
 #define PAY_BANK_RANGE (PAY_BANK_MAX - PAY_BANK_MIN)
 
-void enactTransaction(Player *player, int inventory, Transaction transactionType);
-
 /**
  * This function updates the current inventory by adding a new status to
- * a specified position 
- * 
+ * a specified position
+ *
  * @param inventory     the inventory that contains ownership details
  * @param position      position of the digit to be replaced
  * @param newStatus     the new digit that will replace the original digit
  */
 void updateInventory(int *inventory, int position, int newStatus);
-float getCost(int position, int inventory, int spaceState, int dice);
-
+int getAmount(enum spaceState state, int position, int inventory, int dice);
+int getNewState(Player *player, int inventory,  enum transactionType tr);
+int getOperation(enum transactionType);
 
 /**
- * This function returns the index of the player who owns the property 
+ * This function returns the index of the player who owns the property
  * in a specified position.
- * 
+ *
  * @param inventory     the inventory that contains ownership details
  * @param position      position of property to be checked
- * @return int 
+ * @return int
  */
 int getOwner(int inventory, int position);
 
@@ -60,14 +67,15 @@ int getOwner(int inventory, int position);
 // The following functions are used to get states
 
 /**
- * This function uses bitwise operation 
- * 
- * @param player 
- * @param inventory 
- * @return int 
+ * This function uses bitwise operation
+ *
+ * @param player
+ * @param inventory
+ * @return int
  */
-int getSpaceState(Player player, int inventory);
-int getPlayerState(Player player, int inventory);
+int getSpaceState(Player *player, int inventory);
+int getPlayerState(Player *player, enum spaceState sState, int inventory);
+
 
 // The following function is used for input validation
 int isInventoryValid(int inventory);

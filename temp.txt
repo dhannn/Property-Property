@@ -1,0 +1,85 @@
+Player *player = game->activePlayer;
+    Player *otherPlayer = nextPlayer(player);
+    enum transactionType tr;
+    int state = game->state;
+    int *inventory = &(game->inventory);
+    int *dice = &(game->dice);
+    float amount;
+    int temp;
+    char in;
+
+    if(passesGo(player)){
+        output("You can claim ₱%f from the bank!", BANK_BONUS);
+        tr = GET_BANK_BONUS;
+        enactTransaction(game, tr);
+    }
+
+    if((state & IS_JAIL_TIME)){
+        setCanPlay(player, 0);
+        output("Oof... you landed on jail. You lose a turn.");
+    }
+
+    if(state & IS_FEELIN_LUCKY){
+        output("Oooo... You're feeling lucky today, huh?");
+        in = input("Press R to roll the dice.", DEFAULT | ROLL);
+
+        if(amount == 0){
+            setCanPlay(player, 0);
+        } else if(isPrime(*dice)){
+            output("Congrats! The bank gave you Php%f", amount);
+        } else{
+            output("Awww... You owe the bank Php%f", amount);
+        }
+    }
+
+    if((state & PROPERTY_BY_BANK) && (state & HAS_CASH)){
+        tr = BUY_PROPERTY;
+
+
+        output("You can buy this property with a price of ₱%f", amount);
+        in = input("Press B to buy or X if not.", DEFAULT | BUY | X);
+    }
+
+    if((state & PROPERTY_BY_BANK) && !(state & HAS_CASH)){
+        output("Awww... You cannot buy this property.");
+    }
+
+    if((state & PROPERTY_BY_PLAYER) && !(state & PROPERTY_IS_RENOVATED) && (state & HAS_CASH)){
+        output("You can upgrade this property with a price of ₱%f", RENOVATION_COST);
+        in = input("Press N to renovate or X if not", DEFAULT | RENOVATE | X);
+    }
+
+    if((state & PROPERTY_BY_PLAYER) && !(state & PROPERTY_IS_RENOVATED) && !(state & HAS_CASH)){
+        output("You don't have enough money to renovate.");
+    }
+
+    if((state & PROPERTY_BY_OTHER) && (state & HAS_CASH)){
+        output("Oh no... You landed on %d's property. Pay up ₱%f!", 1, amount);
+
+        in = input("Press A to pay rent.", DEFAULT | PAY);
+    }
+
+    if((state & PROPERTY_BY_OTHER) && !(state & HAS_CASH) && (state & HAS_PROPERTY)){
+        output("You have no money left! You have to sell your property to pay rent.");
+        in = input("Press the position of your chosen property (1 - Treehouse, ..., 9 - Farmhouse).", DEFAULT | RANGE, 1, MAX_SPACES);
+
+        while(!isOwnedByPlayer(*inventory, atoi(&in), index)){
+            in = input("Please select a property you own.", DEFAULT | RANGE, 1, MAX_SPACES);
+        }
+
+        amount = getAmount(atoi(&in), *inventory, PROPERTY_BY_BANK, *dice) / 5.0;
+        temp = atoi(&in);
+
+        output("The property costs ₱%f.", amount);
+
+        in = input("Press S to sell this property or X if you want to choose other!", DEFAULT | SELL | X);
+        handleInput(in, game, amount, temp);
+
+        getGameState(game);
+        handleState(game);
+    }
+
+    if((state & PROPERTY_BY_OTHER) && !(state & HAS_CASH) && !(state & HAS_PROPERTY)){
+        output("Oh no! You're bankrupt.");
+        game->isBankrupt = 1;
+    }

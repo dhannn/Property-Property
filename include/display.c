@@ -7,7 +7,7 @@
 // https://en.cppreference.com/w/c/variadic
 
 void printTitle(int y){
-    int startRow = y;  
+    int startRow = y;
     int startColumn = getCenterOrigin(TITLE_WIDTH);
     reposition(startRow, startColumn);
 
@@ -42,14 +42,14 @@ void printSpaces(){
     int originX;
     int originY;
     int numberOfProperties = 0;
-    char names[2][10][LINE_LENGTH] = {{"GO", "TREE", "ELEC", "BEACH", "FARM", "JAIL", "IGLOO", "RAIL", "FEEL", "CASTLE"}, 
+    char names[2][10][LINE_LENGTH] = {{"GO", "TREE", "ELEC", "BEACH", "FARM", "JAIL", "IGLOO", "RAIL", "FEEL", "CASTLE"},
                         {"", "HOUSE", "CO.", "HOUSE", "HOUSE", "TIME", "", "ROAD", "LUCKY", ""}};
 
     for(i = 0; i < 3; i++){
         for(j = 0; j < 4; j++){
             if(!(i == 1 && j > 0 && j < 3)){
                 originX = (CARD_WIDTH + 2) * j + 1;
-                originY = (CARD_HEIGHT + 1) * i + 1; 
+                originY = (CARD_HEIGHT + 1) * i + 1;
                 createCard(&card, originX, originY, names[0][numberOfProperties], names[1][numberOfProperties]);
                 printSpaceCard(card);
                 numberOfProperties++;
@@ -70,7 +70,7 @@ void gotoInputStream(){
 void printSpaceCard(Card card){
     Point origin = card.outerRectangle.origin;
     int width = card.outerRectangle.width;
-    int height = card.outerRectangle.height;    
+    int height = card.outerRectangle.height;
 
     printRectangle(card.outerRectangle);
     printRectangle(card.innerRectangle);
@@ -90,7 +90,7 @@ void displayDiceRoll(int dice){
     for(i = 0; i < 4; i++){
         // random delay from .25s to 0.50s
         // for ✨ s u s p e n s e ✨
-        delayNum = rand() % 250 + 250; 
+        delayNum = rand() % 250 + 250;
 
         // makes sure that each random roll is unique
         do{
@@ -110,11 +110,11 @@ void displayDiceRoll(int dice){
 void printDice(int dice){
     int i;
     Point origin = {86, 20};
-    char diceMatrix[6][3][14] = {{DICE_R1_NONE, DICE_R2_ONE, DICE_R3_NONE}, 
-                            {DICE_R1_ONE, DICE_R2_NONE, DICE_R3_ONE}, 
-                            {DICE_R1_ONE, DICE_R2_ONE, DICE_R3_ONE}, 
-                            {DICE_R1_TWO, DICE_R2_NONE, DICE_R3_TWO}, 
-                            {DICE_R1_TWO, DICE_R2_ONE, DICE_R3_TWO}, 
+    char diceMatrix[6][3][14] = {{DICE_R1_NONE, DICE_R2_ONE, DICE_R3_NONE},
+                            {DICE_R1_ONE, DICE_R2_NONE, DICE_R3_ONE},
+                            {DICE_R1_ONE, DICE_R2_ONE, DICE_R3_ONE},
+                            {DICE_R1_TWO, DICE_R2_NONE, DICE_R3_TWO},
+                            {DICE_R1_TWO, DICE_R2_ONE, DICE_R3_TWO},
                             {DICE_R1_TWO, DICE_R2_TWO, DICE_R3_TWO}};
     reposition(origin.y, origin.x);
     printf(DICE_TOP);
@@ -164,14 +164,14 @@ Point getOriginPlayerMarker(int position){
         printf("Error");
     if(column == -1)
         printf("Error");
-    
+
     // int i;
     // Point originMatrix[10];
     Point origin;
 
-    
+
     origin.x = CARD_WIDTH + (CARD_WIDTH + 2) * 2 * column + 1;
-    origin.y = (CARD_HEIGHT + CARD_BORDER_SIZE - CARD_BOTTOM_BORDER) / 2 
+    origin.y = (CARD_HEIGHT + CARD_BORDER_SIZE - CARD_BOTTOM_BORDER) / 2
                 + (CARD_HEIGHT + 1) * row;
 
     return origin;
@@ -179,26 +179,26 @@ Point getOriginPlayerMarker(int position){
 
 int getRowFromSpace(int position){
     if(position >= 0 && position <= 3)
-       return 0; 
+       return 0;
     else if(position == 9 || position == 4)
         return 1;
     else if(position >= 5 && position <= 8)
         return 2;
-    
+
     return -1;
 }
 
 int getColumnFromSpace(int position, int row){
     switch(row){
         case 0:
-            return position; 
-        case 1: 
+            return position;
+        case 1:
             if(position == 4)
                 return 3;
             else if(position == 9)
                 return 0;
         case 2:
-            return 8 - position; 
+            return 8 - position;
     }
 
     return -1;
@@ -209,8 +209,10 @@ void printCash(float cash, int index, char *name){
     reposition(origin.y - 1, origin.x);
     printf("CASH");
     reposition(origin.y + index, origin.x);
-    printf("%s\t\t₱%.2f", name, cash);
-    
+    // printf("%s\t\t₱%.2f", name, cash);
+
+    printf("%d\t\t₱%.2f", index + 1, cash);
+
     reposition((CARD_HEIGHT + 1) * 3 + 1, 1);
 }
 
@@ -225,7 +227,7 @@ void printOwnership(int position, int index){
 
 void printRenovated(int position){
     Point origin = getOriginPropertyMarker(position);
-    
+
     reposition(origin.y, origin.x);
     printf("*");
 
@@ -237,7 +239,7 @@ Point getOriginPropertyMarker(int position){
     int col = getColumnFromSpace(position, row);
     Point origin = {
         (CARD_WIDTH + 2) * 2 * col + 3,
-        (CARD_HEIGHT + 1) * row + 2 
+        (CARD_HEIGHT + 1) * row + 2
     };
 
     return origin;
@@ -245,17 +247,17 @@ Point getOriginPropertyMarker(int position){
 
 void createCard(Card *card, int x, int y, char line1[], char line2[]){
     Rectangle outer = {
-        {x, y}, 
-        CARD_WIDTH, 
+        {x, y},
+        CARD_WIDTH,
         CARD_HEIGHT
     };
 
     Rectangle inner = {
-        {x + CARD_BORDER_SIZE, y + CARD_BORDER_SIZE}, 
-        CARD_WIDTH - 2 * CARD_BORDER_SIZE, 
+        {x + CARD_BORDER_SIZE, y + CARD_BORDER_SIZE},
+        CARD_WIDTH - 2 * CARD_BORDER_SIZE,
         CARD_HEIGHT - CARD_BOTTOM_BORDER - 1
     };
-    
+
     card->outerRectangle = outer;
     card->innerRectangle = inner;
     strcpy(card->text1, line1);
@@ -273,11 +275,11 @@ void printSpaceText(Card card){
         card.innerRectangle.origin.y + card.innerRectangle.height
     };
     Point line1Origin = {
-        textOrigin.x + (LINE_LENGTH  - line1Width), 
+        textOrigin.x + (LINE_LENGTH  - line1Width),
         textOrigin.y
     };
     Point line2Origin = {
-        textOrigin.x + (LINE_LENGTH - line2Width), 
+        textOrigin.x + (LINE_LENGTH - line2Width),
         textOrigin.y + 1
     };
 
@@ -288,7 +290,7 @@ void printSpaceText(Card card){
     reposition(line2Origin.y, line2Origin.x);
     for(i = 0; i < line2Width; i++)
         printf("%c ", line2[i]);
-    
+
 }
 
 void printRectangle(Rectangle rect){
@@ -305,28 +307,28 @@ void printRectangle(Rectangle rect){
             // print line in the first row
             if(rows == origin.y){
                 printf(" _");
-            } 
-            // print the bottom left corner 
+            }
+            // print the bottom left corner
             else if(columns == origin.x && rows == height + origin.y - 1){
                 printf("|_");
             }
-            // print the bottom right corner 
+            // print the bottom right corner
             else if(columns == width + origin.x - 1 && rows == height + origin.y - 1){
                 printf(" _|");
             }
-            // print line the last row 
+            // print line the last row
             else if(rows == height + origin.y - 1){
                 printf(" _");
             }
-            // print the left side of the rect 
+            // print the left side of the rect
             else if(columns == origin.x){
                 printf("|");
             }
-            // print the right side of the rect 
+            // print the right side of the rect
             else if(columns == width + origin.x - 1){
                 printf("   |");
             }
-            // add the spaces between 
+            // add the spaces between
             else {
                 printf("  ");
             }
@@ -358,7 +360,7 @@ void output(char *prompt, ...){
 char input(char *prompt, int validInputs, ...){
     char in;
     va_list args;
-    
+
     va_start(args, validInputs);
 
     gotoInputStream();
@@ -368,7 +370,7 @@ char input(char *prompt, int validInputs, ...){
     moveDown(1);
     moveLeft(strlen(prompt));
     clearLine();
-    
+
     printf(">> ");
     scanf(" %c", &in);
 
@@ -383,7 +385,7 @@ void format(char *prompt, va_list args){
     int i = 0;
     int flag = 0;
     char current;
-    
+
     do{
         current = *(prompt + i);
 
@@ -409,7 +411,7 @@ void format(char *prompt, va_list args){
                     flag = 0;
                     break;
             }
-            
+
         } else {
             putchar(current);
         }
@@ -428,21 +430,21 @@ void validateInput(char *in, int validInputs, va_list args){
 
 int isValidInput(char *in, int validInputs, va_list args){
     /**
-     * The following boolean values have two parts: 
+     * The following boolean values have two parts:
      * *in == <KEY> and validInputs & <BITMASK> != 0.
-     * 
-     * The first part checks whether the user input 
+     *
+     * The first part checks whether the user input
      * (i.e. *in) matches the keystroke defined for
-     * each commands (i.e. <KEY>). 
-     * 
-     * The second part checks whether the command 
-     * (i.e. <BITMASK>) is in the valid inputs 
-     * (i.e. validInputs) and this is done through 
-     * bitwise operation. 
-     * 
-     * Bitwise AND 
+     * each commands (i.e. <KEY>).
+     *
+     * The second part checks whether the command
+     * (i.e. <BITMASK>) is in the valid inputs
+     * (i.e. validInputs) and this is done through
+     * bitwise operation.
+     *
+     * Bitwise AND
      */
-    
+
     // TODO: deference the var "in" in the parameters
     int isPlay = *in == PLAY_KEY && (validInputs & PLAY) != 0;
     int isMenu = *in == MENU_KEY && (validInputs & MENU) != 0;
@@ -465,12 +467,12 @@ int isValidInput(char *in, int validInputs, va_list args){
         return atoi(in) >= min && atoi(in) <= max;
     }
 
-    // If ANY of the keystroke matches the user input AND 
+    // If ANY of the keystroke matches the user input AND
     // the key is also a valid input, it will return true.
-    if(isPlay || isMenu || isExit || isRoll || isBuy || 
+    if(isPlay || isMenu || isExit || isRoll || isBuy ||
         isX || isRenovate || isPay || isSell || isContinue)
         return 1;
-    
+
     // Otherwise, false
     return 0;
 }
@@ -485,7 +487,7 @@ int getCenterOrigin(int width){
 }
 
 void delay(int millisecond){
-    long pause; 
+    long pause;
     clock_t now, then;
 
     pause = millisecond * (CLOCKS_PER_SEC / 1000);

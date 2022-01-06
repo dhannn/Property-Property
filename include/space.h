@@ -42,8 +42,3 @@ int isOwnedByPlayer(int inventory, int position, int playerIndex);
 // The following functions are used for validating inputs
 int isProperty(int position);
 int isWithinRange(int position);
-
-// The following functions are helper functions 
-int extractDigit(int number, int place);
-void setDigit(int *number, int place, int newStatus);
-int power(int base, int exponent);
