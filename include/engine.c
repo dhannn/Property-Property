@@ -37,8 +37,6 @@ void updateScreenElements(Game game){
 
 void handleInput(char in, Game *game, ...){
     // int cost = 0;
-    Player *player = game->activePlayer;
-    Player *otherPlayer = nextPlayer(player);
     va_list args;
     va_start(args, game);
 
@@ -51,16 +49,10 @@ void handleInput(char in, Game *game, ...){
             displayDiceRoll(game->dice);
             break;
         case BUY_KEY:
-            enactTransaction(game, BUY_PROPERTY);
-            break;
         case RENOVATE_KEY:
-            enactTransaction(game, RENOVATE_PROPERTY);
-            break;
         case SELL_KEY:
-            enactTransaction(game, SELL_PROPERTY);
-            break;
         case PAY_KEY:
-            enactTransaction(game, PAY_RENT);
+            enactTransaction(game);
         case X_KEY:
             break;
         case EXIT_KEY:
@@ -74,57 +66,59 @@ void handleState(Game *game){
     Player *player = game->activePlayer;
     GameState state = game->state;
 
+    Transaction *transaction = &(game->transaction);
+
     char *in = &(game->input);
     *in = 'X';
 
-
     switch(state){
-        case GO_JAIL:
-            output("Oof... you landed on jail. You lose a turn.");
+        // Transaction States
+        case CAN_BUY:
+        case CAN_RENOVATE:
+        case CAN_PAY_RENT:
+        case CAN_PAY_RENT_RENOVATED:
+            transaction->transactionType = getTransactionType(state);
+            transaction->amount = getAmountFromTransactionType(transaction->transactionType,
+                                                                getPosition(player), game->dice);
+            transaction->newState = getNewState(player, game->inventory, transaction->newState);
+            transaction->operation = getOperation(transaction->transactionType);
+            break;
 
-            setCanPlay(player, 0);
+        // Non-Transaction States
+        case GO_JAIL:
+            setCanPlay(player, 1);
             break;
         case LUCKY:
-            output("Oooo... You're feeling lucky today, huh?");
+            if(game->dice == 1){
+                setCanPlay(player, 1);
+            } else if(isPrime(game->dice)){
+                transaction->transactionType = GET_FROM_BANK;
+                transaction->amount = rand() % GET_BANK_RANGE + GET_BANK_MIN;
+                transaction->operation = ADD;
 
-            *in = input("Press R to roll the dice.", DEFAULT | ROLL);
-
-            if(*in == 1)
-                setCanPlay(player, 0);
-            else if(isPrime(atoi(in))){
-                enactTransaction(game, GET_FROM_BANK);
+                output("Congrats! The bank is giving you P%d", transaction->amount);
+                enactTransaction(game);
             } else {
-                enactTransaction(game, PAY_BANK);
+                transaction->amount = getAmountFromTransactionType(transaction->transactionType,
+                                                                    getPosition(player), game->dice);
+                transaction->transactionType = PAY_BANK;
+                transaction->amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
+                transaction->operation = SUBTRACT;
+
+                output("Awwwww... You owe the bank P%d.", transaction->amount);
+                enactTransaction(game);
             }
             break;
-        case CAN_BUY:
-            output("You can buy this property with a price of ₱%f");
-            *in = input("Press B to renovate or X if not", DEFAULT | BUY | X);
-            break;
         case CANNOT_BUY:
-            output("Awww... You cannot buy this property.");
-            break;
-        case CAN_RENOVATE:
-            output("You can upgrade this property with a price of ₱%f", RENOVATION_COST);
-            *in = input("Press N to renovate or X if not", DEFAULT | RENOVATE | X);
             break;
         case CANNOT_RENOVATE:
-            output("You don't have enough money to renovate.");
             break;
         case ALREADY_RENOVATED:
-            output("You already renovated this property!");
-            break;
-        case CAN_PAY_RENT:
-            output("Oh no... You landed on %d's property. Pay up ₱%f!");
-            *in = input("Press A to pay rent.", DEFAULT | PAY);
             break;
         case CANNOT_PAY_RENT:
-            output("Oh no... You landed on %d's property. Pay up ₱%f!");
-            *in = input("Press the position of your chosen property (1 - Treehouse, ..., 9 - Farmhouse).",
-                       DEFAULT | RANGE, 1, MAX_SPACES);
             break;
         case BANKRUPT:
-            output("Oh no! You're bankrupt.");
+            game->isBankrupt = 1;
             break;
     }
 
@@ -171,8 +165,8 @@ void playTurn(Game *game){
         displayPlayerMove(previous, current, index);
 
         getGameState(game);
+        displayStateOutput(game);
         handleState(game);
-
     } else {
         setCanPlay(activePlayer, 1);
     }
@@ -214,14 +208,14 @@ void displayStateOutput(Game *game){
             *in = input("Press R to roll the dice.", DEFAULT | ROLL);
             break;
         case CAN_BUY:
-            output("You can buy this property with a price of ₱%f");
-            *in = input("Press B to renovate or X if not", DEFAULT | BUY | X);
+            output("You can buy this property with a price of ₱%d");
+            *in = input("Press B to buy or X if not", DEFAULT | BUY | X, game->transaction.amount);
             break;
         case CANNOT_BUY:
             output("Awww... You cannot buy this property.");
             break;
         case CAN_RENOVATE:
-            output("You can upgrade this property with a price of ₱%f", RENOVATION_COST);
+            output("You can upgrade this property with a price of ₱%d", game->transaction.amount);
             *in = input("Press N to renovate or X if not", DEFAULT | RENOVATE | X);
             break;
         case CANNOT_RENOVATE:
@@ -231,11 +225,11 @@ void displayStateOutput(Game *game){
             output("You already renovated this property!");
             break;
         case CAN_PAY_RENT:
-            output("Oh no... You landed on %d's property. Pay up ₱%f!");
+            output("Oh no... You landed on %d's property. Pay up ₱%d!", game->transaction.amount);
             *in = input("Press A to pay rent.", DEFAULT | PAY);
             break;
         case CANNOT_PAY_RENT:
-            output("Oh no... You landed on %d's property. Pay up ₱%f!");
+            output("Looks like you don't have any money. You need to sell one of your property to pay rent.");
             *in = input("Press the position of your chosen property (1 - Treehouse, ..., 9 - Farmhouse).",
                        DEFAULT | RANGE, 1, MAX_SPACES);
             break;

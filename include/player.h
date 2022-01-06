@@ -30,7 +30,7 @@ typedef struct player Player;
 
 #define INITIAL_CASH 400.0
 #define BANK_BONUS 50.0
-#define COST_MULTIPLIER 2.0
+#define COST_MULTIPLIER 1
 #endif
 
 /**

@@ -16,14 +16,13 @@
 enum gameState{
     GO_JAIL,
     LUCKY,
-    LUCKY_GET,
-    LUCKY_PAY,
     CAN_BUY,
     CANNOT_BUY,
     CAN_RENOVATE,
     CANNOT_RENOVATE,
     ALREADY_RENOVATED,
     CAN_PAY_RENT,
+    CAN_PAY_RENT_RENOVATED,
     CANNOT_PAY_RENT,
     BANKRUPT
 };
@@ -43,7 +42,6 @@ struct game{
 
 typedef struct game Game;
 
-#endif
 
 /**
  * This function initializes all values of the game structure
@@ -72,10 +70,11 @@ void rollDice(int *dice);
 void movePlayer(Player *activePlayer, int dice);
 
 
-void enactTransaction(Game *game, enum transactionType tr);
+void enactTransaction(Game *game);
 
 enum transactionType getTransactionType(int state);
 
+int getAmountFromTransactionType(TransactionType tr, int position, int dice);
 /**
  * This function gets the state of the game and assigns it to
  * the state member of the game structure.
@@ -92,3 +91,5 @@ void getGameState(Game *game);
  * @param activePlayer
  */
 void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer);
+
+#endif

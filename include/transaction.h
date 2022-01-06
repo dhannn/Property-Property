@@ -4,7 +4,6 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 enum transactionType{
-    NULL_TRANSACTION,
     GET_BANK_BONUS,
     GET_FROM_BANK,
     PAY_BANK,
@@ -27,7 +26,6 @@ struct transaction{
 #define DEFAULT_STATE -1
 
 typedef struct transaction Transaction;
-#endif
 
 #define RENOVATION_COST 50.0
 #define ELECTRIC_COMPANY_BUYING_COST 150.0
@@ -49,9 +47,6 @@ typedef struct transaction Transaction;
  * @param newStatus     the new digit that will replace the original digit
  */
 void updateInventory(int *inventory, int position, int newStatus);
-int getAmount(enum spaceState state, int position, int inventory, int dice);
-int getNewState(Player *player, int inventory,  enum transactionType tr);
-int getOperation(enum transactionType);
 
 /**
  * This function returns the index of the player who owns the property
@@ -76,6 +71,11 @@ int getOwner(int inventory, int position);
 int getSpaceState(Player *player, int inventory);
 int getPlayerState(Player *player, enum spaceState sState, int inventory);
 
+int getNewState(Player *player, int inventory,  enum transactionType tr);
+int getOperation(enum transactionType);
+
 
 // The following function is used for input validation
 int isInventoryValid(int inventory);
+
+#endif

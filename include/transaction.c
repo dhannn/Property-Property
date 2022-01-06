@@ -78,6 +78,8 @@ int getAmount(enum spaceState state, int position, int inventory, int dice){
 
         return rentingCost;
     }
+
+    return -1;
 }
 
 int getOwner(int inventory, int position){
@@ -114,6 +116,7 @@ int getNewState(Player *player, int inventory,  enum transactionType tr){
         case GET_FROM_BANK:
         case PAY_BANK:
         case PAY_RENT:
+        case PAY_RENT_RENOVATED:
             return propertyStatus;
         case BUY_PROPERTY:
             return index + 1;

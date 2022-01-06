@@ -70,35 +70,66 @@ void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer){
     *activePlayer = nextPlayer(*activePlayer);
 }
 
-void enactTransaction(Game *game, enum transactionType tr){
-    Transaction transaction;
+void enactTransaction(Game *game){
+    Transaction transaction = game->transaction;
     Player *player = game->activePlayer;
 
-    int state = game->state;
     int position = getPosition(player);
-    int dice = game->dice;
     int *inventory = &(game->inventory);
-
-    transaction.amount = getAmount(state, position, *inventory, dice);
-    transaction.newState = getNewState(player, *inventory, tr);
-    transaction.operation = getOperation(tr);
 
     updateCash(player, transaction.amount, transaction.operation);
     updateInventory(inventory, position, transaction.newState);
 }
 
 enum transactionType getTransactionType(int state){
-    if(state & PROPERTY_BY_BANK && state & HAS_CASH)
-        return BUY_PROPERTY;
+    switch(state){
+        case CAN_BUY:
+            return BUY_PROPERTY;
+        case CAN_RENOVATE:
+            return RENOVATE_PROPERTY;
+        case CAN_PAY_RENT:
+            return PAY_RENT;
+        case CAN_PAY_RENT_RENOVATED:
+            return PAY_RENT_RENOVATED;
+    }
 
-    if(state & PROPERTY_BY_PLAYER && !(state & PROPERTY_IS_RENOVATED))
-        return RENOVATE_PROPERTY;
+    return -1;
+}
 
-    if(state & PROPERTY_BY_OTHER && !(state & PROPERTY_IS_RENOVATED))
-        return PAY_RENT;
+int getAmountFromTransactionType(TransactionType tr, int position, int dice){
+    int buyingCost = 20 * (position % 7);
+    int rentingCost = buyingCost / 5;
 
-    if(state & PROPERTY_BY_OTHER && state & PROPERTY_IS_RENOVATED)
-        return PAY_RENT_RENOVATED;
+    if(position == ELECTRIC_COMPANY && tr == BUY_PROPERTY)
+        return ELECTRIC_COMPANY_BUYING_COST * COST_MULTIPLIER;
 
-    return NULL_TRANSACTION;
+    if(position == ELECTRIC_COMPANY && (tr == PAY_RENT || tr == PAY_RENT_RENOVATED))
+        return 8 * dice * COST_MULTIPLIER;
+
+    if(position == RAILROAD && tr == BUY_PROPERTY)
+        return RAILROAD_BUYING_COST * COST_MULTIPLIER;
+
+    if(position == ELECTRIC_COMPANY && (tr == PAY_RENT || tr == PAY_RENT_RENOVATED))
+        return RAILROAD_RENTING_COST * COST_MULTIPLIER;
+
+    switch(tr){
+        case BUY_PROPERTY:
+            return buyingCost;
+        case RENOVATE_PROPERTY:
+            return RENOVATION_COST * COST_MULTIPLIER;
+        case PAY_RENT_RENOVATED:
+            rentingCost = 1 + 2 * rentingCost;
+        case PAY_RENT:
+            return rentingCost;
+    }
+
+    // NULL_TRANSACTION,
+    // GET_BANK_BONUS,
+    // GET_FROM_BANK,
+    // PAY_BANK,
+    // BUY_PROPERTY,
+    // RENOVATE_PROPERTY,
+    // PAY_RENT,
+    // PAY_RENT_RENOVATED,
+    // SELL_PROPERTY
 }

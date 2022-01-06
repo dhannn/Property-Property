@@ -1,15 +1,15 @@
 /**************************************************************************************
-* 
-*   Description:        This header file contains functions responsible 
+*
+*   Description:        This header file contains functions responsible
 *                       for printing and displaying screen elements to the console.
 *   Programmed by:      Daniel III L. Ramos
 *   Last Modified:      12-26-2021
 *   Version:            1.0
-*   
-* 
-*   Acknowledgements:   
-*   
-*   Peterson, Christian. 3 Nov 2021. ANSI Escape Sequences. 
+*
+*
+*   Acknowledgements:
+*
+*   Peterson, Christian. 3 Nov 2021. ANSI Escape Sequences.
 *   https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 *
 *   This Github gist lays out all the ANSI escape sequences I used in the project.
@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-// These are macros that define the title screen. 
+// These are macros that define the title screen.
 #define TITLE_LINE_1 "█▀█ █▀█ █▀█ █▀█ █▀▀ █▀█ ▀█▀ █▄█  "
 #define TITLE_LINE_2 "█▀▀ █▀▄ █▄█ █▀▀ ██▄ █▀▄  █   █  ▄"
 #define TITLE_LINE_3 "█▀█ █▀█ █▀█ █▀█ █▀▀ █▀█ ▀█▀ █▄█  "
@@ -56,12 +56,12 @@
 #define CARD_WIDTH 7
 #define CARD_HEIGHT 10
 #define CARD_BORDER_SIZE 1
-#define CARD_BOTTOM_BORDER 2    
+#define CARD_BOTTOM_BORDER 2
 #define LINE_LENGTH 6
 #define INPUT_STREAM_POSITION ((CARD_HEIGHT + 1) * 3 + 1)
 
- 
-// These are macros that define ANSI escape 
+
+// These are macros that define ANSI escape
 // sequences that help in displaying (both
 // in cursor position and color)
 
@@ -90,7 +90,7 @@
 #define DISPLAY_H
 struct point{
     int x;
-    int y;  
+    int y;
 };
 
 typedef struct point Point;
@@ -113,18 +113,18 @@ struct card{
 typedef struct card Card;
 
 enum input{
-    PLAY        =   0b00000000001, 
-    MENU        =   0b00000000010, 
-    EXIT        =   0b00000000100, 
-    ROLL        =   0b00000001000, 
-    BUY         =   0b00000010000, 
+    PLAY        =   0b00000000001,
+    MENU        =   0b00000000010,
+    EXIT        =   0b00000000100,
+    ROLL        =   0b00000001000,
+    BUY         =   0b00000010000,
     X           =   0b00000100000,
-    RENOVATE    =   0b00001000000, 
+    RENOVATE    =   0b00001000000,
     PAY         =   0b00010000000,
-    SELL        =   0b00100000000, 
+    SELL        =   0b00100000000,
     RANGE       =   0b01000000000,
-    CONTINUE    =   0b10000000000, 
-    DEFAULT     =   MENU | EXIT 
+    CONTINUE    =   0b10000000000,
+    DEFAULT     =   MENU | EXIT
 };
 
 void printTitle(int y);
@@ -161,7 +161,7 @@ void printRenovated(int position);
 
 
 /*********      INPUT-HANDLING FUNCTIONS        *********/
-// I made output() and input() variadic functions to accomodate 
+// I made output() and input() variadic functions to accomodate
 // formatted string like in the printf() function
 void output(char *prompt, ...);
 char input(char *prompt, int validInputs, ...);
@@ -172,7 +172,7 @@ void toUpper(char *in);
 
 
 /*********          SCREEN FUNCTIONS            *********/
-int getCenterOrigin(int width); // (screen width - text width) / 2 
+int getCenterOrigin(int width); // (screen width - text width) / 2
 void delay(int millisecond);
 void clear();
 void clearLine();

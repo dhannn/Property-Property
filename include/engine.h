@@ -27,8 +27,8 @@ void getPlayerName(Player *players);
  * @param ...
  */
 void handleInput(char in, Game *game, ...);
-
 void displayStateOutput(Game *game);
+
 
 /**
  * This function does necessary operation based on the state of the game
