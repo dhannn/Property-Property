@@ -4,8 +4,7 @@
 
 
 void initializeGame(Game *game){
-    int i;
-    srand(13);
+    srand(1);
 
     game->dice = 0;
     game->inventory = 0;
@@ -30,7 +29,7 @@ void getGameState(Game *game){
     int inventory = game->inventory;
 
     int spaceState = getSpaceState(player, inventory);
-    int playerState = getPlayerState(player, spaceState, inventory);
+    int playerState = getPlayerState(player, spaceState, inventory, game->dice);
 
     if(spaceState & IS_JAIL_TIME)
         game->state = GO_JAIL;
@@ -66,7 +65,6 @@ void getGameState(Game *game){
 }
 
 void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer){
-    int turn = (getIndex(*activePlayer) + 1) % MAX_PLAYERS;
     *activePlayer = nextPlayer(*activePlayer);
 }
 

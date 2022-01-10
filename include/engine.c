@@ -26,7 +26,7 @@ void updateScreenElements(Game game){
     for(i = 0; i < MAX_PLAYERS; i++){
         position = getPosition(players);
         cash = getCash(players);
-        // name = getName(player);
+        name = getName(players);
 
         printPlayer(position, i, 0);
         printCash(cash, i, name);
@@ -56,7 +56,6 @@ void handleInput(char in, Game *game, ...){
         case X_KEY:
             break;
         case EXIT_KEY:
-            game->dice = 0;
             game->isBankrupt = -1;
             break;
     }
@@ -69,7 +68,6 @@ void handleState(Game *game){
     Transaction *transaction = &(game->transaction);
 
     char *in = &(game->input);
-    *in = 'X';
 
     switch(state){
         // Transaction States
@@ -80,8 +78,9 @@ void handleState(Game *game){
             transaction->transactionType = getTransactionType(state);
             transaction->amount = getAmountFromTransactionType(transaction->transactionType,
                                                                 getPosition(player), game->dice);
-            transaction->newState = getNewState(player, game->inventory, transaction->newState);
+            transaction->newState = getNewState(player, game->inventory, transaction->transactionType);
             transaction->operation = getOperation(transaction->transactionType);
+            handleInput(*in, game);
             break;
 
         // Non-Transaction States
@@ -123,13 +122,12 @@ void handleState(Game *game){
     }
 
     // displayStateOutput(game);
-    handleInput(*in, game);
     updateScreenElements(*game);
 }
 
 void playGame(Game *game){
     initializeGame(game);
-    // getPlayerName(game->players);
+    getPlayerName(game->players);
     clear();
 
     do{
@@ -176,7 +174,7 @@ void playTurn(Game *game){
 
 void getPlayerName(Player *players){
     int i;
-    char *temp = malloc(sizeof(char) * MAX_NAME_CHAR);
+    char temp[MAX_NAME_CHAR];
     for(i = 0; i < MAX_PLAYERS; i++){
         moveUp(2);
         printf("Player %d, please enter your name\n>> ", i + 1);
@@ -185,18 +183,18 @@ void getPlayerName(Player *players){
         setName(players, temp);
         players = nextPlayer(players);
     }
-
-    free(temp);
 }
 
 void displayWinner(Player *player){
     clear();
-    // printf("Congrats, %s! You won.", getName(player));
+    printf("Congrats, %s! You won.", getName(player));
 }
 
 void displayStateOutput(Game *game){
     GameState state = game->state;
+
     char *in = &(game->input);
+    *in = 'X';
 
     switch(state){
         case GO_JAIL:
@@ -208,8 +206,8 @@ void displayStateOutput(Game *game){
             *in = input("Press R to roll the dice.", DEFAULT | ROLL);
             break;
         case CAN_BUY:
-            output("You can buy this property with a price of ₱%d");
-            *in = input("Press B to buy or X if not", DEFAULT | BUY | X, game->transaction.amount);
+            output("You can buy this property with a price of ₱%d", game->transaction.amount);
+            *in = input("Press B to buy or X if not", DEFAULT | BUY | X);
             break;
         case CANNOT_BUY:
             output("Awww... You cannot buy this property.");

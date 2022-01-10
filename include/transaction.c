@@ -39,17 +39,6 @@ int getSpaceState(Player *player, int inventory){
     return state;
 }
 
-// enum transactionType getTransactionType(int gameState){
-//     if(gameState & IS_GO)
-//         return GET_BANK_BONUS;
-//     if(gameState & PROPERTY_BY_BANK)
-//         return GET_FROM_BANK;
-//     if(gameState & PROPERTY_BY_PLAYER)
-//         return RENOVATE_PROPERTY;
-//     if(gameState & PROPERTY_BY_OTHER)
-//         return PAY_RENT;
-// }
-
 int getAmount(enum spaceState state, int position, int inventory, int dice){
     int buyingCost = 20.0 * (position % 7) * COST_MULTIPLIER;
     int rentingCost = (1.0/5.0) * buyingCost * COST_MULTIPLIER;
@@ -91,12 +80,12 @@ int getOwner(int inventory, int position){
     return (property + 1) % 2;
 }
 
-int getPlayerState(Player *player, enum spaceState sState, int inventory){
+int getPlayerState(Player *player, enum spaceState sState, int inventory, int dice){
     int position = getPosition(player);
     int cash = getCash(player);
     int playerState = 0;
 
-    int cost = getAmount(position, inventory, sState, 0);
+    int cost = getAmount(sState, position, inventory, 0);
 
     if(hasProperty(inventory, getIndex(player)))
         playerState = playerState | HAS_PROPERTY;

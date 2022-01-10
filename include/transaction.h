@@ -69,7 +69,7 @@ int getOwner(int inventory, int position);
  * @return int
  */
 int getSpaceState(Player *player, int inventory);
-int getPlayerState(Player *player, enum spaceState sState, int inventory);
+int getPlayerState(Player *player, enum spaceState sState, int inventory, int dice);
 
 int getNewState(Player *player, int inventory,  enum transactionType tr);
 int getOperation(enum transactionType);
