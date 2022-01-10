@@ -1,4 +1,5 @@
 #include "display.h"
+#include "helper.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -445,36 +446,65 @@ int isValidInput(char *in, int validInputs, va_list args){
      * Bitwise AND
      */
 
-    // TODO: deference the var "in" in the parameters
-    int isPlay = *in == PLAY_KEY && (validInputs & PLAY) != 0;
-    int isMenu = *in == MENU_KEY && (validInputs & MENU) != 0;
-    int isExit = *in == EXIT_KEY && (validInputs & EXIT) != 0;
-    int isRoll = *in == ROLL_KEY && (validInputs & ROLL) != 0;
-    int isBuy = *in == BUY_KEY && (validInputs & BUY) != 0;
-    int isX = *in == X_KEY && (validInputs & X) != 0;
-    int isRenovate = *in == RENOVATE_KEY && (validInputs & RENOVATE) != 0;
-    int isPay = *in == PAY_KEY && (validInputs & PAY) != 0;
-    int isSell = *in == SELL_KEY && (validInputs & SELL) != 0;
-    int isContinue = *in == CONTINUE_KEY && (validInputs & CONTINUE) != 0;
+    int i;
+    int flag;
+    int bitMask;
+    char keys[] = {PLAY_KEY, MENU_KEY, EXIT_KEY, ROLL_KEY, BUY_KEY, X_KEY,
+                    RENOVATE_KEY, PAY_KEY, SELL_KEY, SELL_KEY, CONTINUE_KEY};
 
-    int isRange = (validInputs & RANGE) != 0;
+    // variables for range
     int min, max;
+    int isWithinRange;
+    int isNumeric;
 
-    if(isRange){
-        min = va_arg(args, int);
-        max = va_arg(args, int);
+    min = va_arg(args, int);
+    max = va_arg(args, int);
+    isNumeric = atoi(in) != 0;
+    isWithinRange = atoi(in) >= min && atoi(in) <= max;
 
-        return atoi(in) >= min && atoi(in) <= max;
+    for(i = 0; i < CONTINUE; i++){
+        if(isNumeric && isWithinRange && (validInputs & RANGE)){
+            min = va_arg(args, int);
+            max = va_arg(args, int);
+
+            return 1;
+        }
+
+        bitMask = power(2, i);
+        flag = *in == keys[i] && (validInputs & bitMask);
+
+        if(flag)
+            return 1;
     }
 
-    // If ANY of the keystroke matches the user input AND
-    // the key is also a valid input, it will return true.
-    if(isPlay || isMenu || isExit || isRoll || isBuy ||
-        isX || isRenovate || isPay || isSell || isContinue)
-        return 1;
-
-    // Otherwise, false
     return 0;
+
+    // int isPlay = *in == PLAY_KEY && (validInputs & PLAY) != 0;
+    // int isMenu = *in == MENU_KEY && (validInputs & MENU) != 0;
+    // int isExit = *in == EXIT_KEY && (validInputs & EXIT) != 0;
+    // int isRoll = *in == ROLL_KEY && (validInputs & ROLL) != 0;
+    // int isBuy = *in == BUY_KEY && (validInputs & BUY) != 0;
+    // int isX = *in == X_KEY && (validInputs & X) != 0;
+    // int isRenovate = *in == RENOVATE_KEY && (validInputs & RENOVATE) != 0;
+    // int isPay = *in == PAY_KEY && (validInputs & PAY) != 0;
+    // int isSell = *in == SELL_KEY && (validInputs & SELL) != 0;
+    // int isContinue = *in == CONTINUE_KEY && (validInputs & CONTINUE) != 0;
+
+    // int isRange = (validInputs & RANGE) != 0;
+
+    // if(isRange){
+
+    //     return atoi(in) >= min && atoi(in) <= max;
+    // }
+
+    // // If ANY of the keystroke matches the user input AND
+    // // the key is also a valid input, it will return true.
+    // if(isPlay || isMenu || isExit || isRoll || isBuy ||
+    //     isX || isRenovate || isPay || isSell || isContinue)
+    //     return 1;
+
+    // // Otherwise, false
+    // return 0;
 }
 
 void toUpper(char *in){

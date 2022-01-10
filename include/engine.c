@@ -160,6 +160,7 @@ void playTurn(Game *game){
 
         current = getPosition(activePlayer);
         previous = previousPosition(activePlayer);
+        // TODO: change function signature for displaye player move
         displayPlayerMove(previous, current, index);
 
         getGameState(game);

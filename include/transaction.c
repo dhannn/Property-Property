@@ -96,7 +96,7 @@ int getPlayerState(Player *player, enum spaceState sState, int inventory, int di
     return playerState;
 }
 
-int getNewState(Player *player, int inventory,  enum transactionType tr){
+int getNewState(Player *player, int inventory,  TransactionType tr){
     int propertyStatus = extractDigit(inventory, getPosition(player));
     int index = getIndex(player);
 
@@ -118,7 +118,7 @@ int getNewState(Player *player, int inventory,  enum transactionType tr){
     return -1;
 }
 
-int getOperation(enum transactionType tr){
+int getOperation(TransactionType tr){
     switch(tr){
         case GET_BANK_BONUS:
         case GET_FROM_BANK:

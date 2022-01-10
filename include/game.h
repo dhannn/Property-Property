@@ -29,6 +29,20 @@ enum gameState{
 
 typedef enum gameState GameState;
 
+typedef struct {
+    unsigned int spaceState: 6;
+    unsigned int playerState: 2;
+} State;
+
+#define IS_GO                   0b000001 // 1
+#define IS_FEELING_LUCKY        0b000010 // 2
+#define PROPERTY_BY_BANK        0b000100 // 4
+#define PROPERTY_BY_PLAYER      0b001000 // 8
+#define PROPERTY_BY_OTHER       0b010000 // 16
+#define PROPERTY_IS_RENOVATED   0b100000 // 32
+#define HAS_CASH                0b01     // 1
+#define HAS_PROPERTY            0b10     // 2
+
 struct game{
     Player *players;                // the players
     Player *activePlayer;           // pointer to the current player
