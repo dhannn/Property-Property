@@ -1,4 +1,5 @@
 #include "game.h"
+#include "helper.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -12,6 +13,10 @@ void initializeGame(Game *game){
 
     initializePlayers(&(game->players), MAX_PLAYERS);
     game->activePlayer = game->players;
+    game->transaction.transactionType = NULL_TRANSACTION;
+    game->transaction.amount = 0;
+    game->transaction.newStatus = 0;
+    game->transaction.operation = ADD;
 }
 
 void rollDice(int *dice){
@@ -24,110 +29,91 @@ void movePlayer(Player *activePlayer, int dice){
     setPosition(activePlayer, new);
 }
 
-void getGameState(Game *game){
+void makeTransaction(Game *game){
     Player *player = game->activePlayer;
     int inventory = game->inventory;
-
+    Transaction *transaction = &(game->transaction);
     int spaceState = getSpaceState(player, inventory);
-    int playerState = getPlayerState(player, spaceState, inventory, game->dice);
 
-    if(spaceState & IS_JAIL_TIME)
-        game->state = GO_JAIL;
+    transaction->transactionType = getTransactionType(spaceState);
+    transaction->newStatus = getNewState(player, inventory, transaction->transactionType);
+    transaction->amount = getAmount(game->state, getPosition(player), game->inventory, game->dice);
+}
 
-    else if(spaceState & IS_FEELIN_LUCKY)
-        game->state = LUCKY;
+void updateState(Game *game){
+    Player *player = game->activePlayer;
+    State *state = &(game->state);
 
-    else if(spaceState & PROPERTY_BY_PLAYER && spaceState & PROPERTY_IS_RENOVATED)
-        game->state = ALREADY_RENOVATED;
+    int position = getPosition(player);
+    int inventory = game->inventory;
+    int dice = game->dice;
+    int spaceState = getSpaceState(player, inventory);
+    int cash = getCash(player);
+    int amount = getAmount(spaceState, position, inventory, dice);
+    int hasCash = isCashSufficient(cash, amount);
 
-    else if(playerState & HAS_CASH){
-        if(spaceState & PROPERTY_BY_BANK)
-            game->state = CAN_BUY;
-
-        if(spaceState & PROPERTY_BY_PLAYER && !(spaceState & PROPERTY_IS_RENOVATED))
-            game->state = CAN_RENOVATE;
-
-        if(spaceState & PROPERTY_BY_OTHER)
-            game->state = CAN_PAY_RENT;
-    } else {
-        if(spaceState & PROPERTY_BY_BANK)
-            game->state = CANNOT_BUY;
-
-        if(spaceState & PROPERTY_BY_PLAYER && !(spaceState & PROPERTY_IS_RENOVATED))
-            game->state = CANNOT_RENOVATE;
-
-        if(spaceState & PROPERTY_BY_OTHER && spaceState & HAS_PROPERTY)
-            game->state = CANNOT_PAY_RENT;
-
-        if(spaceState & PROPERTY_BY_OTHER && !(spaceState & HAS_PROPERTY))
-            game->state = BANKRUPT;
-    }
+    if(bitcmp(spaceState, IS_FEELIN_LUCKY))
+        *state = PLAY_BY_LUCK;
+    else if(bitcmp(spaceState, IS_JAIL_TIME))
+        *state = GO_TO_JAIL;
+    else if(bitcmp(spaceState, PROPERTY_BY_BANK) && hasCash)
+        *state = CAN_BUY;
+    else if(bitcmp(spaceState, PROPERTY_BY_BANK) && !hasCash)
+        *state = CANNOT_BUY;
+    else if(bitcmp(spaceState, PROPERTY_BY_PLAYER) && !bitcmp(spaceState, PROPERTY_IS_RENOVATED) && hasCash)
+        *state = CAN_RENOVATE;
+    else if(bitcmp(spaceState, PROPERTY_BY_PLAYER) && !bitcmp(spaceState, PROPERTY_IS_RENOVATED) && !hasCash)
+        *state = CANNOT_RENOVATE;
+    else if(bitcmp(spaceState, PROPERTY_BY_OTHER) && hasCash)
+        *state = CAN_PAY;
+    else if(bitcmp(spaceState, PROPERTY_BY_OTHER) && !hasCash)
+        *state = CANNOT_PAY;
+    else
+        *state = DO_NOTHING;
 }
 
 void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer){
     *activePlayer = nextPlayer(*activePlayer);
 }
 
-void enactTransaction(Game *game){
-    Transaction transaction = game->transaction;
+void sellProperty(Game *game){
+    int position = atoi(&(game->input));
+    int *inventory = &(game->inventory);
+    int state = game->state;
+    int dice = game->dice;
+
+    int amount = getAmount(state, position, *inventory, dice);
     Player *player = game->activePlayer;
 
-    int position = getPosition(player);
-    int *inventory = &(game->inventory);
-
-    updateCash(player, transaction.amount, transaction.operation);
-    updateInventory(inventory, position, transaction.newState);
+    updateCash(player, amount, ADD);
+    updateInventory(inventory, position, 0);
 }
 
-enum transactionType getTransactionType(int state){
-    switch(state){
-        case CAN_BUY:
-            return BUY_PROPERTY;
-        case CAN_RENOVATE:
-            return RENOVATE_PROPERTY;
-        case CAN_PAY_RENT:
-            return PAY_RENT;
-        case CAN_PAY_RENT_RENOVATED:
-            return PAY_RENT_RENOVATED;
+int playByLuck(Game *game){
+    int dice = game->dice;
+    Player *player = game->activePlayer;
+    int amount;
+
+    if(dice == 1){
+        setCanPlay(player, 0);
+        return LUCK_IS_JAIL;
     }
 
-    return -1;
+    if(isPrime(dice)){
+        amount = rand() % GET_BANK_RANGE + GET_BANK_MIN;
+        game->transaction.amount = amount;
+        game->transaction.operation = ADD;
+
+        return LUCK_IS_GET_BANK;
+    } else{
+        amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
+        game->transaction.amount = amount;
+        game->transaction.operation = SUBTRACT;
+
+        return LUCK_IS_PAY_BANK;
+    }
 }
 
-int getAmountFromTransactionType(TransactionType tr, int position, int dice){
-    int buyingCost = 20 * (position % 7);
-    int rentingCost = buyingCost / 5;
+void goToJail(Game *game){
 
-    if(position == ELECTRIC_COMPANY && tr == BUY_PROPERTY)
-        return ELECTRIC_COMPANY_BUYING_COST * COST_MULTIPLIER;
-
-    if(position == ELECTRIC_COMPANY && (tr == PAY_RENT || tr == PAY_RENT_RENOVATED))
-        return 8 * dice * COST_MULTIPLIER;
-
-    if(position == RAILROAD && tr == BUY_PROPERTY)
-        return RAILROAD_BUYING_COST * COST_MULTIPLIER;
-
-    if(position == ELECTRIC_COMPANY && (tr == PAY_RENT || tr == PAY_RENT_RENOVATED))
-        return RAILROAD_RENTING_COST * COST_MULTIPLIER;
-
-    switch(tr){
-        case BUY_PROPERTY:
-            return buyingCost;
-        case RENOVATE_PROPERTY:
-            return RENOVATION_COST * COST_MULTIPLIER;
-        case PAY_RENT_RENOVATED:
-            rentingCost = 1 + 2 * rentingCost;
-        case PAY_RENT:
-            return rentingCost;
-    }
-
-    // NULL_TRANSACTION,
-    // GET_BANK_BONUS,
-    // GET_FROM_BANK,
-    // PAY_BANK,
-    // BUY_PROPERTY,
-    // RENOVATE_PROPERTY,
-    // PAY_RENT,
-    // PAY_RENT_RENOVATED,
-    // SELL_PROPERTY
 }

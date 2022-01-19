@@ -90,7 +90,7 @@ void setCanPlay(Player *player, int canPlay){
 }
 
 void setName(Player *player, char *name){
-    int src_length = strlen(name);
+    int src_length = strlen(name) + 1;
     player->name = malloc(src_length + 1);
 
     strncpy(player->name, name, src_length);

@@ -1,18 +1,3 @@
-// For 01 Jan - 03 Jan
-// TODO: Refactor Refactor Refactor
-// TODO: Make function and file comments
-// TODO: Ask Ms. about future sessions
-// Ask Ms. about ANSI
-
-// For 04 Jan - 08 Jan
-// TODO: Bonus feature
-
-// For 08 Jan - 10 Jan
-// TODO: Refactor Refactor Refactor
-
-// For 10 Jan - 18 Jan
-// TODO: Finish documentation
-
 #include "include/display.h"
 #include "include/transaction.h"
 #include "include/engine.h"

@@ -111,6 +111,8 @@ void displayDiceRoll(int dice){
 void printDice(int dice){
     int i;
     Point origin = {86, 20};
+
+    // maps the composition of a dice given the number of dots
     char diceMatrix[6][3][14] = {{DICE_R1_NONE, DICE_R2_ONE, DICE_R3_NONE},
                             {DICE_R1_ONE, DICE_R2_NONE, DICE_R3_ONE},
                             {DICE_R1_ONE, DICE_R2_ONE, DICE_R3_ONE},
@@ -210,9 +212,9 @@ void printCash(float cash, int index, char *name){
     reposition(origin.y - 1, origin.x);
     printf("CASH");
     reposition(origin.y + index, origin.x);
-    // printf("%s\t\t₱%.2f", name, cash);
+    printf("%s\t\t₱%.2f", name, cash);
 
-    printf("%d\t\t₱%.2f", index + 1, cash);
+    // printf("%d\t\t₱%.2f", index + 1, cash);
 
     reposition((CARD_HEIGHT + 1) * 3 + 1, 1);
 }
@@ -376,7 +378,7 @@ char input(char *prompt, int validInputs, ...){
     scanf(" %c", &in);
 
     toUpper(&in);
-    validateInput(&in, validInputs, args);
+    validateInput(prompt, &in, validInputs, args);
 
     va_end(args);
     return in;
@@ -384,7 +386,7 @@ char input(char *prompt, int validInputs, ...){
 
 void format(char *prompt, va_list args){
     int i = 0;
-    int flag = 0;
+    int flag = 0; // a flag if the current char is a specifier
     char current;
 
     do{
@@ -393,20 +395,26 @@ void format(char *prompt, va_list args){
         if(current == '%')
             flag = 1;
 
+        // custom format specifiers
         if(flag){
             switch(current){
+                // price types
+                case 'p':
+                    printf("%s%d", PESO, va_arg(args, int));
+                    flag = 0;
+                    break;
+                // other integer types
                 case 'd':
                     printf("%d", va_arg(args, int));
                     flag = 0;
                     break;
-                case 'f':
-                    printf("%.2f", va_arg(args, double));
-                    flag = 0;
-                    break;
+                // char types
                 case 'c':
+                    // XXX: va_arg takes the type 'int' because C promotes char (and other smaller integral values) to int
                     printf("%c", va_arg(args, int));
                     flag = 0;
                     break;
+                // string types
                 case 's':
                     printf("%s", va_arg(args, char*));
                     flag = 0;
@@ -422,7 +430,7 @@ void format(char *prompt, va_list args){
 
 }
 
-void validateInput(char *in, int validInputs, va_list args){
+void validateInput(char *prompt, char *in, int validInputs, va_list args){
     while(!isValidInput(in, validInputs, args)){
         moveUp(2);
         *in = input("Wrong input! Try again.", validInputs, 0);
@@ -462,7 +470,7 @@ int isValidInput(char *in, int validInputs, va_list args){
     isNumeric = atoi(in) != 0;
     isWithinRange = atoi(in) >= min && atoi(in) <= max;
 
-    for(i = 0; i < CONTINUE; i++){
+    for(i = 0; i < 11; i++){
         if(isNumeric && isWithinRange && (validInputs & RANGE)){
             min = va_arg(args, int);
             max = va_arg(args, int);
@@ -478,33 +486,6 @@ int isValidInput(char *in, int validInputs, va_list args){
     }
 
     return 0;
-
-    // int isPlay = *in == PLAY_KEY && (validInputs & PLAY) != 0;
-    // int isMenu = *in == MENU_KEY && (validInputs & MENU) != 0;
-    // int isExit = *in == EXIT_KEY && (validInputs & EXIT) != 0;
-    // int isRoll = *in == ROLL_KEY && (validInputs & ROLL) != 0;
-    // int isBuy = *in == BUY_KEY && (validInputs & BUY) != 0;
-    // int isX = *in == X_KEY && (validInputs & X) != 0;
-    // int isRenovate = *in == RENOVATE_KEY && (validInputs & RENOVATE) != 0;
-    // int isPay = *in == PAY_KEY && (validInputs & PAY) != 0;
-    // int isSell = *in == SELL_KEY && (validInputs & SELL) != 0;
-    // int isContinue = *in == CONTINUE_KEY && (validInputs & CONTINUE) != 0;
-
-    // int isRange = (validInputs & RANGE) != 0;
-
-    // if(isRange){
-
-    //     return atoi(in) >= min && atoi(in) <= max;
-    // }
-
-    // // If ANY of the keystroke matches the user input AND
-    // // the key is also a valid input, it will return true.
-    // if(isPlay || isMenu || isExit || isRoll || isBuy ||
-    //     isX || isRenovate || isPay || isSell || isContinue)
-    //     return 1;
-
-    // // Otherwise, false
-    // return 0;
 }
 
 void toUpper(char *in){
@@ -533,7 +514,7 @@ void reposition(int row, int column){
 
 void clear(){
     puts(CLEAR);
-    reposition(1,1);
+    reposition(1, 1);
 }
 
 void clearLine(){

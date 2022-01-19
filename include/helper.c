@@ -23,7 +23,7 @@ int power(int base, int exponent){
 
     for(i = 0; i < exponent; i++)
         result *= base;
-    
+
     return result;
 }
 
@@ -41,4 +41,8 @@ int isPrime(int number){
     }
 
     return flag;
+}
+
+int bitcmp(int bitField, int bitMask){
+    return (bitField & bitMask) == bitMask;
 }

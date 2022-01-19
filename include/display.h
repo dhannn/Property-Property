@@ -37,6 +37,7 @@
 #define DICE_R3_ONE     "|_ _ _•_|"
 #define DICE_R3_TWO     "|_•_ _•_|"
 
+#define PESO "₱"
 
 //These are macros that define valid keystrokes.
 #define PLAY_KEY 'P'
@@ -166,7 +167,7 @@ void printRenovated(int position);
 void output(char *prompt, ...);
 char input(char *prompt, int validInputs, ...);
 void format(char *prompt, va_list args);
-void validateInput(char *in, int validInputs, va_list args);
+void validateInput(char *prompt, char *in, int validInputs, va_list args);
 int isValidInput(char *in, int validInputs, va_list args);
 void toUpper(char *in);
 

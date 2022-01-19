@@ -39,7 +39,37 @@ int getSpaceState(Player *player, int inventory){
     return state;
 }
 
-int getAmount(enum spaceState state, int position, int inventory, int dice){
+int getPlayerState(Player *player, int inventory, Transaction transaction){
+    int state = 0;
+    int cash = getCash(player);
+    int amount = transaction.amount;
+    int index = getIndex(player);
+
+    if(isCashSufficient(cash, amount))
+        state = state | HAS_CASH;
+
+    if(hasProperty(inventory, index))
+        state = state | HAS_PROPERTY;
+
+    return state;
+}
+
+TransactionType getTransactionType(int spaceState){
+    if(spaceState & PROPERTY_BY_BANK)
+        return BUY_PROPERTY;
+    else if(spaceState & PROPERTY_BY_PLAYER)
+        return RENOVATE_PROPERTY;
+    else if(spaceState & PROPERTY_BY_OTHER)
+        return PAY_RENT;
+
+    return NULL_TRANSACTION;
+}
+
+int getNewState(Player *player, int inventory, TransactionType transactionType){
+    return 2;
+}
+
+int getAmount(int state, int position, int inventory, int dice){
     int buyingCost = 20.0 * (position % 7) * COST_MULTIPLIER;
     int rentingCost = (1.0/5.0) * buyingCost * COST_MULTIPLIER;
 
@@ -80,57 +110,12 @@ int getOwner(int inventory, int position){
     return (property + 1) % 2;
 }
 
-int getPlayerState(Player *player, enum spaceState sState, int inventory, int dice){
+void enactTransaction(Player *player, Transaction transaction, int *inventory){
+    int amount = transaction.amount;
+    int operation = transaction.operation;
+    int newStatus = transaction.newStatus;
     int position = getPosition(player);
-    int cash = getCash(player);
-    int playerState = 0;
 
-    int cost = getAmount(sState, position, inventory, 0);
-
-    if(hasProperty(inventory, getIndex(player)))
-        playerState = playerState | HAS_PROPERTY;
-
-    if(isCashSufficient(cash, cost))
-        playerState = playerState | HAS_CASH;
-
-    return playerState;
-}
-
-int getNewState(Player *player, int inventory,  TransactionType tr){
-    int propertyStatus = extractDigit(inventory, getPosition(player));
-    int index = getIndex(player);
-
-    switch(tr){
-        case GET_BANK_BONUS:
-        case GET_FROM_BANK:
-        case PAY_BANK:
-        case PAY_RENT:
-        case PAY_RENT_RENOVATED:
-            return propertyStatus;
-        case BUY_PROPERTY:
-            return index + 1;
-        case RENOVATE_PROPERTY:
-            return index + 3;
-        case SELL_PROPERTY:
-            return 0;
-    }
-
-    return -1;
-}
-
-int getOperation(TransactionType tr){
-    switch(tr){
-        case GET_BANK_BONUS:
-        case GET_FROM_BANK:
-        case SELL_PROPERTY:
-            return ADD;
-        case PAY_BANK:
-        case BUY_PROPERTY:
-        case RENOVATE_PROPERTY:
-        case PAY_RENT:
-        case PAY_RENT_RENOVATED:
-            return SUBTRACT;
-    }
-
-    return -1;
+    updateCash(player, amount, operation);
+    updateInventory(inventory, position, newStatus);
 }

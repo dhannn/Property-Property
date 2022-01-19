@@ -5,18 +5,18 @@
 #ifndef SPACE_H
 #define SPACE_H
 /**
- * To represent the state of the space, 
+ * To represent the state of the space,
  * I decided to implement a bitmask for a)
  * better readability and b) easy operations.
  */
 enum spaceState {
-    IS_GO                       =   0b000000100, // 4d
-    IS_FEELIN_LUCKY             =   0b000001000, // 8d
-    IS_JAIL_TIME                =   0b000010000, // 16d
-    PROPERTY_BY_BANK            =   0b000100000, // 32d
-    PROPERTY_BY_PLAYER          =   0b001000000, // 64d
-    PROPERTY_BY_OTHER           =   0b010000000, // 128d
-    PROPERTY_IS_RENOVATED       =   0b100000000, // 256d
+    IS_GO                       =   0b0000001, // 1d
+    IS_FEELIN_LUCKY             =   0b0000010, // 2d
+    IS_JAIL_TIME                =   0b0000100, // 4d
+    PROPERTY_BY_BANK            =   0b0001000, // 8d
+    PROPERTY_BY_PLAYER          =   0b0010000, // 16d
+    PROPERTY_BY_OTHER           =   0b0100000, // 32d
+    PROPERTY_IS_RENOVATED       =   0b1000000, // 64d
 };
 
 #define GO                  0
