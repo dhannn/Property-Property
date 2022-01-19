@@ -43,16 +43,23 @@ void printSpaces(){
     int originX;
     int originY;
     int numberOfProperties = 0;
+    // HACK: I specifically hardcoded the string values of each card for convenience sake as finding a mathematical/
+    //      programmatical way of splitting a card name to two lines is more cumbersome than it needed to be.
     char names[2][10][LINE_LENGTH] = {{"GO", "TREE", "ELEC", "BEACH", "FARM", "JAIL", "IGLOO", "RAIL", "FEEL", "CASTLE"},
                         {"", "HOUSE", "CO.", "HOUSE", "HOUSE", "TIME", "", "ROAD", "LUCKY", ""}};
+    int isMiddle;
 
     for(i = 0; i < 3; i++){
         for(j = 0; j < 4; j++){
-            if(!(i == 1 && j > 0 && j < 3)){
+            isMiddle = i == 1 && j > 0 && j < 3;
+
+            if(!isMiddle){
                 originX = (CARD_WIDTH + 2) * j + 1;
                 originY = (CARD_HEIGHT + 1) * i + 1;
+
                 createCard(&card, originX, originY, names[0][numberOfProperties], names[1][numberOfProperties]);
                 printSpaceCard(card);
+
                 numberOfProperties++;
             }
         }

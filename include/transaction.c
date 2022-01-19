@@ -149,4 +149,10 @@ void enactTransaction(Player *player, Transaction transaction, int *inventory){
 
     updateCash(player, amount, operation);
     updateInventory(inventory, position, newStatus);
+
+    // Pays the rent to the other player
+    if(transaction.transactionType == PAY_RENT){
+        Player *rentee = nextPlayer(player);
+        updateCash(rentee, amount, ADD);
+    }
 }

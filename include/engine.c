@@ -13,6 +13,7 @@ void updateScreenElements(Game game){
     char *name;
     Player *players = game.players;
 
+    // Prints the spaces and other attributes (ownership and if renovated)
     for(i = 1; i <= MAX_SPACES; i++){
         owner = getOwner(inventory, i);
 
@@ -23,6 +24,7 @@ void updateScreenElements(Game game){
             printRenovated(i);
     }
 
+    // Prints the cash of the two players
     for(i = 0; i < MAX_PLAYERS; i++){
         position = getPosition(players);
         cash = getCash(players);
@@ -63,7 +65,6 @@ void handleInput(char in, Game *game, ...){
 
 void handleState(Game *game){
     Player *player = game->activePlayer;
-    // Player *otherPlayer = nextPlayer(player);
     State state = game->state;
     Transaction *transaction = &(game->transaction);
 
@@ -132,7 +133,6 @@ void handleState(Game *game){
             output("You cannot renovate this property!");
             break;
         case CANNOT_PAY:
-
             // TODO: make sell property function in game module
             break;
     }

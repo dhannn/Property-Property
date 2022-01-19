@@ -116,5 +116,7 @@ int playByLuck(Game *game){
 }
 
 void goToJail(Game *game){
+    Player *activePlayer = game->activePlayer;
 
+    setCanPlay(activePlayer, 0);
 }
