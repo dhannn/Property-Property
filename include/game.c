@@ -37,7 +37,8 @@ void makeTransaction(Game *game){
 
     transaction->transactionType = getTransactionType(spaceState);
     transaction->newStatus = getNewState(player, inventory, transaction->transactionType);
-    transaction->amount = getAmount(game->state, getPosition(player), game->inventory, game->dice);
+    transaction->amount = getAmount(spaceState, getPosition(player), game->inventory, game->dice);
+    transaction->operation = getOperation(transaction->transactionType);
 }
 
 void updateState(Game *game){

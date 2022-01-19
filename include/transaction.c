@@ -65,8 +65,39 @@ TransactionType getTransactionType(int spaceState){
     return NULL_TRANSACTION;
 }
 
+int getOperation(TransactionType transactionType){
+    switch(transactionType){
+        case BUY_PROPERTY:
+        case RENOVATE_PROPERTY:
+        case PAY_RENT:
+            return SUBTRACT;
+            break;
+        case NULL_TRANSACTION:
+            return ADD;
+            break;
+    }
+
+    return 0;
+}
+
 int getNewState(Player *player, int inventory, TransactionType transactionType){
-    return 2;
+    int position = getPosition(player);
+    int index = getIndex(player);
+    int status = extractDigit(inventory, position);
+
+    switch(transactionType){
+        case BUY_PROPERTY:
+            status = index + 1;
+            break;
+        case RENOVATE_PROPERTY:
+            status += 2;
+            break;
+        case PAY_RENT:
+        case NULL_TRANSACTION:
+            break;
+    }
+
+    return status;
 }
 
 int getAmount(int state, int position, int inventory, int dice){

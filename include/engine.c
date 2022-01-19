@@ -74,6 +74,7 @@ void handleState(Game *game){
     }
 
     switch(state){
+        // <---------- Non-Transaction states -------->
         case DO_NOTHING:
             output("Nothing to do here!");
             break;
@@ -103,23 +104,32 @@ void handleState(Game *game){
 
             goToJail(game);
             break;
+
+        // <---------- Transaction states -------->
+
         case CAN_BUY:
+            makeTransaction(game);
+
             output("You can buy this property with a price of %p.", transaction->amount);
             *in = input("Press B to buy this property or X to do nothing.", DEFAULT | BUY | X, transaction->amount);
+            break;
+        case CAN_RENOVATE:
+            makeTransaction(game);
+
+            output("You can renovate this property with a price of %p", transaction->amount);
+            *in = input("Press N to renovate your property or X to do nothing.", DEFAULT | RENOVATE | X);
+            break;
+        case CAN_PAY:
+            makeTransaction(game);
+
+            output("Oh no! You need to pay rent %p.", transaction->amount);
+            *in = input("Press A to pay rent.", DEFAULT | PAY);
             break;
         case CANNOT_BUY:
             output("You cannot buy this property! The price %p is too pricey.", transaction->amount);
             break;
-        case CAN_RENOVATE:
-            output("You can renovate this property with a price of %p", transaction->amount);
-            *in = input("Press N to renovate your property or X to do nothing.", DEFAULT | RENOVATE | X);
-            break;
         case CANNOT_RENOVATE:
             output("You cannot renovate this property!");
-            break;
-        case CAN_PAY:
-            output("Oh no! You need to pay rent %p.", transaction->amount);
-            *in = input("Press A to pay rent.", DEFAULT | PAY_KEY);
             break;
         case CANNOT_PAY:
 

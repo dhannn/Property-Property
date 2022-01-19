@@ -214,8 +214,6 @@ void printCash(float cash, int index, char *name){
     reposition(origin.y + index, origin.x);
     printf("%s\t\t₱%.2f", name, cash);
 
-    // printf("%d\t\t₱%.2f", index + 1, cash);
-
     reposition((CARD_HEIGHT + 1) * 3 + 1, 1);
 }
 
