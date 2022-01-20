@@ -7,7 +7,7 @@ If displays are not exhibiting expected behavior during runtime (i.e. elements d
 
 The program redraws the display every turn.
 
-![](2022-01-05-13-39-53.png)
+![](docs/2022-01-05-13-39-53.png)
 This is the expected output.
 
 ## ANSI Support
