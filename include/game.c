@@ -77,19 +77,6 @@ void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer){
     *activePlayer = nextPlayer(*activePlayer);
 }
 
-void sellProperty(Game *game){
-    int position = atoi(&(game->input));
-    int *inventory = &(game->inventory);
-    int state = game->state;
-    int dice = game->dice;
-
-    int amount = getAmount(state, position, *inventory, dice);
-    Player *player = game->activePlayer;
-
-    updateCash(player, amount, ADD);
-    updateInventory(inventory, position, 0);
-}
-
 int playByLuck(Game *game){
     int dice = game->dice;
     Player *player = game->activePlayer;
@@ -119,4 +106,17 @@ void goToJail(Game *game){
     Player *activePlayer = game->activePlayer;
 
     setCanPlay(activePlayer, 0);
+}
+
+void sellProperty(Game *game){
+    int position = atoi(&(game->input));
+    int *inventory = &(game->inventory);
+    int state = game->state;
+    int dice = game->dice;
+
+    int amount = getAmount(state, position, *inventory, dice);
+    Player *player = game->activePlayer;
+
+    updateCash(player, amount, ADD);
+    updateInventory(inventory, position, 0);
 }

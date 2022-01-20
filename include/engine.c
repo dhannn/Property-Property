@@ -133,7 +133,24 @@ void handleState(Game *game){
             output("You cannot renovate this property!");
             break;
         case CANNOT_PAY:
-            // TODO: make sell property function in game module
+            int index = getIndex(player);
+            int cash = getCash(player);
+            int position = getPosition(player);
+
+            while(hasProperty(game->inventory, index) && !isCashSufficient(cash, transaction->amount)){
+                if(hasProperty(game->inventory, index)){
+                    output("Oh no! You have no money to pay your rent. You have to sell one of your properties");
+                    *in = input("Enter the position of the property chosen. (ex: 1 for Treehouse, ..., 9 for Igloo.", DEFAULT | RANGE, 0, 9);
+
+                    while(getOwner(game->inventory, player) == index)
+                        *in = input("Please choose a property you own.", DEFAULT | RANGE, 0, 9);
+
+                    sellProperty(game);
+                } else {
+                    output("Oh no! You've gone bankrupt!");
+                    game->isBankrupt = 1;
+                }
+            }
             break;
     }
 }
