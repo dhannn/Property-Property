@@ -2,15 +2,16 @@
 # https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-7.2
 
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 CFLAGS_TEST=-Wall -c
 BIN="[CCPROG1] MP - Monopoly.exe"
+SRC_DIR=src
 INCLUDE_DIR=include
-INCLUDES=$(wildcard $(INCLUDE_DIR)/*.c)
+INCLUDES=$(wildcard $(SRC_DIR)/$(INCLUDE_DIR)/*.c)
+MAIN_SRC=$(SRC_DIR)/main.c
 TEST_DIR=test_scripts
 TEST_BINS=$(TEST_DIR)/test_player
 TESTS=$(wildcard $(TEST_DIR)/*.c)
-MAIN_SRC=main.c
 
 all: $(BIN)
 

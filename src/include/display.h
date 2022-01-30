@@ -1,9 +1,10 @@
 /**************************************************************************************
 *
-*   Description:        This header file contains functions responsible
-*                       for printing and displaying screen elements to the console.
-*   Programmed by:      Daniel III L. Ramos
-*   Last Modified:      12-26-2021
+*   Description:        This header file contains functions prototypes
+                        responsible for printing and displaying screen
+                        elements to the console.
+*   Programmed by       Daniel III L. Ramos
+*   Last Modified       12-26-2021
 *   Version:            1.0
 *
 *
@@ -12,9 +13,10 @@
 *   Peterson, Christian. 3 Nov 2021. ANSI Escape Sequences.
 *   https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 *
-*   This Github gist lays out all the ANSI escape sequences I used in the project.
+*   This Github gist lays out all the ANSI escape sequences I used.
 *
 **************************************************************************************/
+
 #include <string.h>
 #include <stdarg.h>
 
@@ -62,9 +64,8 @@
 #define INPUT_STREAM_POSITION ((CARD_HEIGHT + 1) * 3 + 1)
 
 
-// These are macros that define ANSI escape
-// sequences that help in displaying (both
-// in cursor position and color)
+// These are macros that define ANSI escape sequences that help in displaying
+// (both in cursor position and color)
 
 // CURSOR POSITIONING
 #define CLEAR "\033[2J"
@@ -83,6 +84,8 @@
 #define CYAN_BG 46
 #define WHITE_FG 37
 #define WHITE_BG 47
+
+#define MAX_SPACES 10
 
 #define TO_UPPER_INCREMENT 32
 #define LOWERCASE_START 97
@@ -128,20 +131,22 @@ enum input{
     DEFAULT     =   MENU | EXIT
 };
 
+
+/* -------------------------------------------------------------------------- */
+/*                      FUNCTIONS PRINTING GAME ELEMENTS                      */
+/* -------------------------------------------------------------------------- */
+
 void printTitle(int y);
 void printOpeningScreen();
 void printSpaces();
 
-
-/*********      FUNCTIONS PRINTING GAME ELEMENTS      *********/
-void gotoInputStream();
-/* ------ Spaces ------ */
+/* --------------------------------- Spaces --------------------------------- */
 void createCard(Card *card, int x, int y, char line1[], char line2[]);
 void printRectangle(Rectangle rect);
 void printSpaceCard(Card card);
 void printSpaceText(Card card);
 
-/* ------ Player ------ */
+/* --------------------------------- Player --------------------------------- */
 void printPlayer(int position, int index, int isErase);
 void displayPlayerMove(int previousPosition, int currentPosition, int index);
 
@@ -149,11 +154,11 @@ Point getOriginPlayerMarker(int position);
 int getRowFromSpace(int position);
 int getColumnFromSpace(int position, int row);
 
-/* ------ Dice ------ */
+/* ---------------------------------- Dice ---------------------------------- */
 void printDice(int dice);
 void displayDiceRoll(int dice);
 
-/* ------ Player and Property Status ------ */
+/* ----------------------- Player and Property Status ----------------------- */
 void printCash(float cash, int index, char *name);
 void printOwnership(int position, int index);
 
@@ -161,9 +166,12 @@ Point getOriginPropertyMarker(int position);
 void printRenovated(int position);
 
 
-/*********      INPUT-HANDLING FUNCTIONS        *********/
+/* -------------------------------------------------------------------------- */
+/*                          INPUT-HANDLING FUNCTIONS                          */
+/* -------------------------------------------------------------------------- */
 // I made output() and input() variadic functions to accomodate
 // formatted string like in the printf() function
+void gotoInputStream();
 void output(char *prompt, ...);
 char input(char *prompt, int validInputs, ...);
 void format(char *prompt, va_list args);
@@ -172,14 +180,17 @@ int isValidInput(char *in, int validInputs, va_list args);
 void toUpper(char *in);
 
 
-/*********          SCREEN FUNCTIONS            *********/
-int getCenterOrigin(int width); // (screen width - text width) / 2
+/* -------------------------------------------------------------------------- */
+/*                              SCREEN FUNCTIONS                              */
+/* -------------------------------------------------------------------------- */
+int getCenterOrigin(int width);
 void delay(int millisecond);
 void clear();
 void clearLine();
 
-
-/*********  FUNCTIONS ABOUT CURSOR POSITIONING  *********/
+ /* -------------------------------------------------------------------------- */
+ /*                     FUNCTIONS ABOUT CURSOR POSITIONING                     */
+ /* -------------------------------------------------------------------------- */
 void reposition(int row, int column);
 void moveUp(int rowDecrement);
 void moveDown(int rowIncrement);

@@ -42,17 +42,26 @@ void printSpaces(){
     int i, j;
     int originX;
     int originY;
+    int titleOrigin = (CARD_HEIGHT + 1) * 2 - 7;
     int numberOfProperties = 0;
-    // HACK: I specifically hardcoded the string values of each card for convenience sake as finding a mathematical/
-    //      programmatical way of splitting a card name to two lines is more cumbersome than it needed to be.
-    char names[2][10][LINE_LENGTH] = {{"GO", "TREE", "ELEC", "BEACH", "FARM", "JAIL", "IGLOO", "RAIL", "FEEL", "CASTLE"},
-                        {"", "HOUSE", "CO.", "HOUSE", "HOUSE", "TIME", "", "ROAD", "LUCKY", ""}};
+    // HACK:    I specifically hardcoded the string values of each card
+    //          for convenience sake as finding a mathematical/
+    //          programmatical way of splitting a card name to two lines
+    //          is more cumbersome than it needed to be.
+    char names[2][10][LINE_LENGTH] = {
+        {"GO", "TREE", "ELEC", "BEACH", "FARM",
+        "JAIL", "IGLOO", "RAIL", "FEEL", "CASTLE"},
+        {"", "HOUSE", "CO.", "HOUSE", "HOUSE",
+        "TIME", "", "ROAD", "LUCKY", ""}};
+
     int isMiddle;
 
     for(i = 0; i < 3; i++){
         for(j = 0; j < 4; j++){
             isMiddle = i == 1 && j > 0 && j < 3;
 
+            // we need to check for middle since this part
+            // is reserved for the title screen
             if(!isMiddle){
                 originX = (CARD_WIDTH + 2) * j + 1;
                 originY = (CARD_HEIGHT + 1) * i + 1;
@@ -65,10 +74,9 @@ void printSpaces(){
         }
     }
 
-    int titleOrigin = (CARD_HEIGHT + 1) * 2 - 7;
     printTitle(titleOrigin);
     reposition(titleOrigin + 4, (CARD_WIDTH + 2) * 2 + 2);
-    printf("Press M for menu , E to exit");
+    printf("Press M for menu, E to exit");
 }
 
 void gotoInputStream(){
@@ -86,22 +94,22 @@ void printSpaceCard(Card card){
     reposition(origin.y + height, origin.x + width);
 }
 
-void displayDiceRoll(int dice){
+void displayDiceRoll(int dice) {
     int delayNum;
     int previous;
     int randomDice;
     int i;
 
-    printf("\x1B[?25l");
+    printf("\x1B[?25l"); // TODO: make this a constant
 
-    // To give the illusion of rolling dice
-    for(i = 0; i < 4; i++){
-        // random delay from .25s to 0.50s
+    // To give the illusion of rolling dice:
+    for(i = 0; i < 4; i++) {
+        // random delay from 0.25s to 0.50s
         // for ✨ s u s p e n s e ✨
         delayNum = rand() % 250 + 250;
 
         // makes sure that each random roll is unique
-        do{
+        do {
             randomDice = rand() % 6 + 1;
         } while(randomDice == previous);
 
@@ -115,9 +123,9 @@ void displayDiceRoll(int dice){
     printf("\x1B[?25h");
 }
 
-void printDice(int dice){
+void printDice(int dice) {
     int i;
-    Point origin = {86, 20};
+    Point origin = {86, 20}; // TODO: make this a constant
 
     // maps the composition of a dice given the number of dots
     char diceMatrix[6][3][14] = {{DICE_R1_NONE, DICE_R2_ONE, DICE_R3_NONE},
@@ -129,6 +137,7 @@ void printDice(int dice){
     reposition(origin.y, origin.x);
     printf(DICE_TOP);
 
+    // cycles through each row to print its equivalent composition
     for(i = 1; i < 4; i++){
         reposition(origin.y + i, origin.x);
         printf(diceMatrix[dice - 1][i - 1]);
@@ -139,16 +148,21 @@ void displayPlayerMove(int previousPosition, int currentPosition, int index){
     int positionDifference = currentPosition - previousPosition;
     int i;
 
+    // in case position cycles back to Go:
     if(positionDifference < 0)
         positionDifference = 10 + currentPosition - previousPosition;
 
     for(i = 0; i < positionDifference; i++){
+        // flickers on
         printPlayer(previousPosition, index, 0);
-        delay(500);
-        printPlayer(previousPosition, index, 1);
+        delay(500); // TODO: extract constant
+
+        // flickers off
+        printPlayer(previousPosition, index, 1); // TODO: make erase a constant/enum
         delay(250);
         previousPosition = (previousPosition + 1) % 10;
     }
+
     printPlayer(previousPosition, index, 0);
 }
 
@@ -175,8 +189,6 @@ Point getOriginPlayerMarker(int position){
     if(column == -1)
         printf("Error");
 
-    // int i;
-    // Point originMatrix[10];
     Point origin;
 
 
@@ -199,15 +211,17 @@ int getRowFromSpace(int position){
 }
 
 int getColumnFromSpace(int position, int row){
+    // the column resembles a piecewise function given row
+
     switch(row){
         case 0:
-            return position;
-        case 1:
+            return position; // first row simply returns the position
+        case 1: // second row depends on each value as the middle is reserved
             if(position == 4)
                 return 3;
             else if(position == 9)
                 return 0;
-        case 2:
+        case 2: // and the last row simply reverses the position
             return 8 - position;
     }
 
@@ -217,7 +231,7 @@ int getColumnFromSpace(int position, int row){
 void printCash(float cash, int index, char *name){
     Point origin = {80, 15};
     reposition(origin.y - 1, origin.x);
-    printf("CASH");
+    printf("[ ------- CASH ------- ]");
     reposition(origin.y + index, origin.x);
     printf("%s\t\t₱%.2f", name, cash);
 

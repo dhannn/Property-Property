@@ -1,7 +1,7 @@
 /*
     Description:    This header file contains all the function prototypes
                     of helper functions used in other modules.
-    Programmed by:  Daniel L. Ramos III (S15A)
+    Programmed by:  Daniel III L. Ramos (S15A)
     Last modified:  19 January 2022
     Version:        3.0.0
 */
