@@ -19,7 +19,7 @@
 
 // The game states dictate the possible outcomes in a turn
 typedef enum {
-    DO_NOTHING,             // when the game has no possible outcome in the turn
+    DO_NOTHING,             // when game has no possible outcome in the turn
     PLAY_BY_LUCK,           // landed on the Feelin Lucky space
     GO_TO_JAIL,             // landed on jail
     CAN_BUY,                // landed on unowned property and has enough money
@@ -151,6 +151,6 @@ void goToJail(Game *game);
     @param  game        the pointer to the game structure
     @return             none
 */
-void sellProperty(Game *game);
+void sellProperty(Game *game, int propertyToSell);
 
 #endif

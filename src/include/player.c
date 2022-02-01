@@ -125,10 +125,14 @@ int previousPosition(Player *player) {
     return player->position->previous->data;
 }
 
-void cleanPlayer(Player *player) {
-    deallocatePositions(player->position);
-    free(player->name);
-    free(player);
+void cleanPlayers(Player *player, int size) {
+    int i;
+
+    for(i = 0; i < size; i++){
+        deallocatePositions(player[i].position);
+        free(player[i].name);
+        free(&player[i]);
+    }
 }
 
 /* -------------------------------------------------------------------------- */

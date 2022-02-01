@@ -42,6 +42,11 @@ void playTurn(Game *game);
 */
 void handleState(Game *game);
 
+/*
+    This function handles
+*/
+void handleInsufficientMoney(Game *game);
+
 /**
     This function calls necessary functions based on user input
 

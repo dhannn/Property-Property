@@ -2,8 +2,8 @@
     Description         This file contains the implementation of functions
                         in the game.h module
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       29-01-2022
-    Version             3.0.0
+    Last Modified       01-02-2022
+    Version             3.1.0
 */
 
 #include "game.h"
@@ -32,7 +32,6 @@ void initializeGame(Game *game) {
     game->transaction.transactionType = NULL_TRANSACTION;
     game->transaction.amount = 0;
     game->transaction.newStatus = 0;
-    game->transaction.operation = ADD;
 }
 
 void rollDice(int *dice) {
@@ -56,7 +55,7 @@ void updateState(Game *game) {
 
     int spaceInfo = getSpaceInfo(player, inventory);
 
-    int amount = getAmount(spaceInfo, position, inventory, dice) * COST_MULTIPLIER;
+    int amount = getAmount(spaceInfo, position, inventory, dice);
     int cash = getCash(player);
     int hasCash = isCashSufficient(cash, amount);
 
@@ -97,9 +96,17 @@ void makeTransaction(Game *game) {
     int spaceInfo = getSpaceInfo(player, inventory);
 
     transaction->transactionType = getTransactionType(spaceInfo);
-    transaction->newStatus = getNewDigit(player, inventory, transaction->transactionType);
-    transaction->amount = getAmount(spaceInfo, getPosition(player), game->inventory, game->dice) * COST_MULTIPLIER;
-    transaction->operation = getOperation(transaction->transactionType);
+    transaction->newStatus = getNewDigit(
+        player,
+        inventory,
+        transaction->transactionType
+        );
+    transaction->amount = getAmount(
+        spaceInfo,
+        getPosition(player),
+        game->inventory,
+        game->dice
+    );
 }
 
 void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer) {
@@ -107,12 +114,10 @@ void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer) {
 }
 
 void cleanGame(Game *game) {
-    // TODO: finish this function
     int i;
 
     for(i = 0; i < MAX_PLAYERS; i++)
-        cleanPlayer(game->players);
-
+        cleanPlayers(game->players, MAX_PLAYERS);
 }
 
 
@@ -158,15 +163,15 @@ void goToJail(Game *game) {
     setCanPlay(activePlayer, 0);
 }
 
-void sellProperty(Game *game) {
-    int position = atoi(&(game->input));
-    int *inventory = &(game->inventory);
-    int spaceInfo = getSpaceInfo(game->activePlayer, game->inventory);
-    int dice = game->dice;
-
-    int amount = getAmount(spaceInfo, position, *inventory, dice) * COST_MULTIPLIER;
+void sellProperty(Game *game, int propertyToSell) {
     Player *player = game->activePlayer;
+    int *inventory = &(game->inventory);
+    int dice = game->dice;
+    int amount = getAmount(
+        PROPERTY_TO_SELL, propertyToSell, *inventory, dice
+    );
+
 
     updateCash(player, amount, ADD);
-    updateInventory(inventory, position, 0);
+    updateInventory(inventory, propertyToSell, 0);
 }

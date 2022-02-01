@@ -2,8 +2,8 @@
     Description         This file contains the implementation details of the
                         transaction.h module
     Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       28-01-2022
-    Version             3.0.0
+    Last modified       01-02-2022
+    Version             3.1.0
 */
 
 #include "transaction.h"
@@ -132,60 +132,48 @@ int getNewDigit(Player *player, int inventory, TransactionType transactionType) 
     return status;
 }
 
-int getOperation(TransactionType transactionType) {
-    switch(transactionType) {
-        case BUY_PROPERTY:
-        case RENOVATE_PROPERTY:
-        case PAY_RENT:
-            return SUBTRACT;
-            break;
-        case NULL_TRANSACTION:
-            return ADD;
-            break;
-    }
-
-    return 0;
-}
-
 int getAmount(int spaceInfo, int position, int inventory, int dice) {
     int buyingCost = 20.0 * (position % 7);
     int rentingCost = (1.0/5.0) * buyingCost;
 
+
     if(spaceInfo & PROPERTY_BY_BANK) {
         if(position == ELECTRIC_COMPANY)
-            return ELECTRIC_COMPANY_BUYING_COST;
+            return ELECTRIC_COMPANY_BUYING_COST * COST_MULTIPLIER;
         if(position == RAILROAD)
-            return RAILROAD_BUYING_COST;
+            return RAILROAD_BUYING_COST * COST_MULTIPLIER;
 
-        return buyingCost;
+        return buyingCost * COST_MULTIPLIER;
     }
 
     if(spaceInfo & PROPERTY_BY_PLAYER)
-        return RENOVATION_COST;
+        return RENOVATION_COST * COST_MULTIPLIER;
 
     if(spaceInfo & PROPERTY_BY_OTHER) {
         if(position == ELECTRIC_COMPANY)
-            return 8 * dice;
+            return 8 * dice * COST_MULTIPLIER;
 
         if(position == RAILROAD)
-            return RAILROAD_RENTING_COST;
+            return RAILROAD_RENTING_COST * COST_MULTIPLIER;
 
         if(spaceInfo & PROPERTY_IS_RENOVATED)
             rentingCost = 1 + 2 * rentingCost;
 
-        return rentingCost;
+        return rentingCost * COST_MULTIPLIER;
     }
+
+    if(spaceInfo & PROPERTY_TO_SELL)
+        return buyingCost * COST_MULTIPLIER / 2;
 
     return -1;
 }
 
 void enactTransaction(Player *player, Transaction transaction, int *inventory) {
     int amount = transaction.amount;
-    int operation = transaction.operation;
     int newStatus = transaction.newStatus;
     int position = getPosition(player);
 
-    updateCash(player, amount, operation);
+    updateCash(player, amount, SUBTRACT);
     updateInventory(inventory, position, newStatus);
 
     // Pays the rent to the other player

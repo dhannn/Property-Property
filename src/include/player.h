@@ -196,7 +196,7 @@ void pushPosition(Position **positionStack, int newPosition);
 */
 void deallocatePositions(Position *positionStack);
 
-void cleanPlayer(Player *player);
+void cleanPlayers(Player *player, int size);
 
 
 #endif

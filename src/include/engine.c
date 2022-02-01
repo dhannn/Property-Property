@@ -2,8 +2,8 @@
     Description         This file contains the implementation details
                         of the engine.h module
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       29-01-2022
-    Version             3.0.0
+    Last Modified       01-02-2022
+    Version             3.1.0
 */
 
 #include <stdio.h>
@@ -75,7 +75,7 @@ void playTurn(Game *game) {
         *in = input("Press R to roll the dice.", ROLL | DEFAULT);
         handleInput(game);
 
-        if(*in != EXIT_KEY){
+        if(*in != EXIT_KEY) {
             movePlayer(activePlayer, game->dice);
 
             current = getPosition(activePlayer);
@@ -108,9 +108,12 @@ void handleInput(Game *game) {
             break;
         case BUY_KEY:
         case RENOVATE_KEY:
-        case SELL_KEY:
         case PAY_KEY:
-            enactTransaction(game->activePlayer, game->transaction, &(game->inventory));
+            enactTransaction(
+                game->activePlayer,
+                game->transaction,
+                &(game->inventory)
+            );
             break;
         case X_KEY:
             break;
@@ -138,6 +141,8 @@ void handleState(Game *game) {
         updateScreenElements(*game);
     }
 
+    makeTransaction(game);
+
     switch(state) {
         // <---------- Non-Transaction states -------->
         case DO_NOTHING:
@@ -154,10 +159,16 @@ void handleState(Game *game) {
                     output("Oh no... You lost your next turn.");
                     break;
                 case LUCK_IS_GET_BANK:
-                    output("Nice! You got %p from the bank.", transaction->amount);
+                    output(
+                        "Nice! You got %p from the bank.",
+                        transaction->amount
+                    );
                     break;
                 case LUCK_IS_PAY_BANK:
-                    output("Oof... You have to pay the bank %p.", transaction->amount);
+                    output(
+                        "Oof... You have to pay the bank %p.",
+                        transaction->amount
+                    );
                     break;
             }
 
@@ -173,16 +184,27 @@ void handleState(Game *game) {
         // <---------- Transaction states -------->
 
         case CAN_BUY:
-            makeTransaction(game);
+            output(
+                "You can buy this property with a price of %p.",
+                transaction->amount
+            );
 
-            output("You can buy this property with a price of %p.", transaction->amount);
-            *in = input("Press B to buy this property or X to do nothing.", DEFAULT | BUY | X, transaction->amount);
+            *in = input(
+                "Press B to buy this property or X to do nothing.",
+                DEFAULT | BUY | X,
+                transaction->amount
+            );
             break;
         case CAN_RENOVATE:
-            makeTransaction(game);
+            output(
+                "You can renovate this property with a price of %p",
+                transaction->amount
+            );
 
-            output("You can renovate this property with a price of %p", transaction->amount);
-            *in = input("Press N to renovate your property or X to do nothing.", DEFAULT | RENOVATE | X);
+            *in = input(
+                "Press N to renovate your property or X to do nothing.",
+                DEFAULT | RENOVATE | X);
+
             break;
         case CAN_PAY:
             makeTransaction(game);
@@ -191,39 +213,93 @@ void handleState(Game *game) {
             *in = input("Press A to pay rent.", DEFAULT | PAY);
             break;
         case CANNOT_BUY:
-            output("You cannot buy this property! The price %p is too pricey.", transaction->amount);
-            *in = 'X';
+            output(
+                "You cannot buy this property! The price %p is too pricey.",
+                transaction->amount
+            );
+
+            *in = 'X'; // resets input to do nothing
             break;
         case CANNOT_RENOVATE:
             output("You cannot renovate this property!");
-            *in = 'X';
+            *in = 'X';  // resets input to do nothing
             break;
         case CANNOT_PAY:
-        {
-            int index = getIndex(player);
-            int cash = getCash(player);
-            int position = getPosition(player);
-            // TODO: test this code
+            output(
+                "Oh no! You don't have enough money to pay the rent %p",
+                transaction->amount
+            );
 
-            while(hasProperty(game->inventory, index) && !isCashSufficient(cash, transaction->amount)) {
-                if(hasProperty(game->inventory, index)) {
-                    output("Oh no! You have no money to pay your rent. You have to sell one of your properties");
-                    *in = input("Enter the position of the property chosen. (ex: 1 for Treehouse, ..., 9 for Igloo.", DEFAULT | RANGE, 0, 9);
+            handleInsufficientMoney(game);
 
-                    while(getOwner(game->inventory, position) == index)
-                        *in = input("Please choose a property you own.", DEFAULT | RANGE, 0, 9);
-
-                    output("The property you chose costs %d");
-                    *in = input("Enter the position of the property chosen. (ex: 1 for Treehouse, ..., 9 for Igloo.", DEFAULT | RANGE, 0, 9);
-                    sellProperty(game);
-                } else {
-                    output("Oh no! You've gone bankrupt!");
-                    game->isBankrupt = 1;
-                }
+            if(!game->isBankrupt) {
+                *in = input("Press A to pay rent.", DEFAULT | PAY);
             }
             break;
-        }
     }
+}
+
+void handleInsufficientMoney(Game *game) {
+    // I made a separate function to handle CANNOT_PAY state
+    // since, unlike others, this has the most complicated logic
+
+    Player *player = game->activePlayer;
+    Transaction *transaction = &(game->transaction);
+    int *inventory = &(game->inventory);
+    char *in = &(game->input);
+    int index = getIndex(player);
+    int cash = getCash(player);
+    int propertyToSell;
+    int flag;
+
+    do {
+        *in = input(
+            "Enter the position of the property chosen."
+            "(ex: 1 for Treehouse, ..., 9 for Igloo)",
+            DEFAULT | RANGE, 1, 9
+        );
+
+        propertyToSell = atoi(in);
+
+        // validates if property is owned by player
+        while(!isOwnedByPlayer(*inventory, propertyToSell, index)) {
+            *in = input(
+                "Please choose a property you own.",
+                DEFAULT | RANGE,
+                1, 9
+            );
+            propertyToSell = atoi(in);
+        }
+
+        // lets player confirm this transaction based on the price
+        output(
+            "This property costs %p!",
+            getAmount(PROPERTY_TO_SELL, propertyToSell, *inventory, game->dice)
+        );
+
+        *in = input(
+            "Press S to confirm selling or X if you want to choose another.",
+            DEFAULT | SELL | X
+        );
+
+        // enacts the actual selling
+        if(*in == 'S'){
+            sellProperty(game, propertyToSell);
+            updateScreenElements(*game);
+        }
+
+        // checks certain conditions that will terminate this loop
+        cash = getCash(player);
+        if(isCashSufficient(cash, transaction->amount))
+            flag = 0;
+        else if(!hasProperty(*inventory, index)) {
+            game->isBankrupt = 1;
+            flag = 0;
+        }
+    } while(flag);
+
+    if(game->isBankrupt)
+        output("Oh no! You've gone bankrupt :(");
 }
 
 void updateScreenElements(Game game) {
@@ -242,7 +318,7 @@ void updateScreenElements(Game game) {
         if(owner != -1)
             printOwnership(i, owner);
 
-        if(isRenovated(inventory, i) == 1)
+        if(isRenovated(inventory, i))
             printRenovated(i);
     }
 

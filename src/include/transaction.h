@@ -2,8 +2,8 @@
     Description         This file contains the function prototypes and other
                         structures involving standard transactions in the game
     Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       28-01-2022
-    Version             3.0.0
+    Last modified       01-02-2022
+    Version             3.1.0
 */
 
 #include "player.h"
@@ -27,14 +27,17 @@
 
 // To represent the information about the currentspace, I decided to implement
 // a bitmask for a) better readability and b) seamless operations.
+
+// also good practice for CCICOMP 😅
 enum spaceInfo {
-    IS_GO                       =   0b0000001, // 1d
-    IS_FEELIN_LUCKY             =   0b0000010, // 2d
-    IS_JAIL_TIME                =   0b0000100, // 4d
-    PROPERTY_BY_BANK            =   0b0001000, // 8d
-    PROPERTY_BY_PLAYER          =   0b0010000, // 16d
-    PROPERTY_BY_OTHER           =   0b0100000, // 32d
-    PROPERTY_IS_RENOVATED       =   0b1000000, // 64d
+    IS_GO                       =   0b00000001, // 1d
+    IS_FEELIN_LUCKY             =   0b00000010, // 2d
+    IS_JAIL_TIME                =   0b00000100, // 4d
+    PROPERTY_BY_BANK            =   0b00001000, // 8d
+    PROPERTY_BY_PLAYER          =   0b00010000, // 16d
+    PROPERTY_BY_OTHER           =   0b00100000, // 32d
+    PROPERTY_TO_SELL            =   0b01000000, // 64d
+    PROPERTY_IS_RENOVATED       =   0b10000000, // 128d
 };
 
 enum space {
@@ -51,9 +54,7 @@ enum space {
 };
 
 
-// This enum is used to determine whether to add or deduct from one's cash
-// and how much cash is added or deducted in a transaction (in getAmount()
-// and getOperation())
+// This enum is used to determine how much cash is added or deducted in a transaction (in getAmount())
 enum transactionType{
     NULL_TRANSACTION,
     BUY_PROPERTY,
@@ -69,7 +70,6 @@ typedef enum transactionType TransactionType;
 struct transaction{
     TransactionType transactionType;
     int amount;
-    int operation;
     int newStatus;
     // TODO: refactor code to include inventory in transaction struct
 };
@@ -178,14 +178,6 @@ TransactionType getTransactionType(int spaceInfo);
     @return                 the new digit in the inventory
 */
 int getNewDigit(Player *player, int inventory, TransactionType transactionType);
-
-/**
-    This function returns the operation needed for the transaction.
-
-    @param  transactionType the type of transaction (e.g BUY, RENOVATE, PAY)
-    @return                 1 if addition; -1 if subtraction
-*/
-int getOperation(TransactionType transactionType);
 
 /**
     This function returns the amount needed for a transaction.
