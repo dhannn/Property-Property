@@ -13,6 +13,8 @@
     If place is more than that of the number, the place value of the number
     will extend until the specified place.
 
+    Pre-condition           number and place are non-negative integers
+
     @param      number      the number to be extracted upon
     @param      place       the place of the digit to be extracted
     @return                 the digit on the specified place
@@ -21,6 +23,9 @@ int extractDigit(int number, int place);
 
 /**
     This function changes the digit of a number based on the specified place
+
+    Pre-condition           number and place are non-negative integers;
+                            newDigit is an integer from 0 to 9
 
     @param      number      the pointer of the number to be changed
     @param      place       the place of the digit to be changed
@@ -31,7 +36,8 @@ void setDigit(int *number, int place, int newDigit);
 
 /**
     This function computes the value of an exponent with a non-negative power.
-    Pre-condition: the exponent (or power) is non-negative
+
+    Pre-condition           the exponent (or power) is non-negative
 
     @param      base        the number to be multiplied
     @param      exponent    the number of times the base is multiplied
@@ -41,6 +47,8 @@ int power(int base, int exponent);
 
 /**
     This function identifies whether or not a number is prime
+
+    Pre-condition           number is a positive integer
 
     @param      number      the number to be examined
     @return                 1 if prime; 0 if not prime; -1 if number is one

@@ -4,8 +4,8 @@
                         responsible for printing and displaying screen
                         elements to the console.
     Programmed by       Daniel III L. Ramos
-    Last Modified       01-02-2022
-    Version             1.1.0
+    Last Modified       05-02-2022
+    Version             1.2.0
 
 
     Acknowledgements:
@@ -45,7 +45,8 @@
 #define PLAY_KEY 'P'
 #define MENU_KEY 'M'
 #define EXIT_KEY 'E'
-#define CONTINUE_KEY 'C'
+#define SETTINGS_KEY 'T'
+#define BACK_KEY 'C'
 #define BUY_KEY 'B'
 #define RENOVATE_KEY 'N'
 #define PAY_KEY 'A'
@@ -124,17 +125,18 @@ typedef struct card Card;
 // This enum is used in input() function to indicate valid inputs
 // It's a nifty way to show valid inputs esp. when used with bitwise operators
 enum input{
-    PLAY        =   0b00000000001,
-    MENU        =   0b00000000010,
-    EXIT        =   0b00000000100,
-    ROLL        =   0b00000001000,
-    BUY         =   0b00000010000,
-    X           =   0b00000100000,  // to do nothing
-    RENOVATE    =   0b00001000000,
-    PAY         =   0b00010000000,
-    SELL        =   0b00100000000,
-    RANGE       =   0b01000000000,  // indicates numerical value within a range
-    CONTINUE    =   0b10000000000,
+    PLAY        =   0b000000000001,
+    MENU        =   0b000000000010,
+    EXIT        =   0b000000000100,
+    ROLL        =   0b000000001000,
+    BUY         =   0b000000010000,
+    X           =   0b000000100000,  // to do nothing
+    RENOVATE    =   0b000001000000,
+    PAY         =   0b000010000000,
+    SELL        =   0b000100000000,
+    RANGE       =   0b001000000000,  // indicates numerical value within a range
+    SETTINGS    =   0b010000000000,
+    BACK        =   0b100000000000,
     DEFAULT     =   MENU | EXIT     // to access menu and exit any time
 };
 

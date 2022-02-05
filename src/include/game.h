@@ -2,8 +2,8 @@
     Description         This file contains the function prototypes and other
                         structures involving the game itself
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       29-01-2022
-    Version             3.0.0
+    Last Modified       05-02-2022
+    Version             3.1.0
 */
 
 #include "transaction.h"
@@ -30,6 +30,16 @@ typedef enum {
     CANNOT_PAY              // landed on other's property and not enough money
 } State;
 
+
+struct config {
+    int initialCash;
+    int costMultiplier;
+    int hasInflation;
+};
+
+typedef struct config Config;
+
+
 // The game structure contains all the information related to the game
 struct game{
     Player *players;                // pointer to the players
@@ -40,6 +50,7 @@ struct game{
     int isBankrupt;                 // boolean
     int dice;                       // contains the current dice value
     char input;                     // shows the input from user
+    Config config;
 };
 
 typedef struct game Game;

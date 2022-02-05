@@ -8,6 +8,7 @@
 
 #include "game.h"
 #include "display.h"
+#define CONFIG_FILE "config"
 
 /**
     This function initializes the game, starts the game loop, displays
@@ -70,3 +71,5 @@ void updateScreenElements(Game game);
     @return             none
 */
 void displayWinner(Player *winner);
+
+void printMenu();

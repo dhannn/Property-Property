@@ -129,6 +129,10 @@ int isOwnedByPlayer(int inventory, int position, int playerIndex);
     This function updates the inventory based on the specified position
     and new status.
 
+    Pre-condition           inventory is a 9-digit (or less) integer;
+                            position is from 1 to 9 and a property space
+                            newStatus is from 0 to 4
+
     @param  inventory       the 9-digit integer containing ownership details
     @param  position        the position of the space
     @param  newStatus       the new value of the digit specified
@@ -148,6 +152,9 @@ int getOwner(int inventory, int position);
 
 /*
     This function checks whether a player has at least one property
+
+    Pre-condition           playerIndex is 0 or 1;
+                            inventory is a 9-digit integer
 
     @param  inventory       the 9-digit integer containing ownership details
     @param  playerIndex     the index of the player

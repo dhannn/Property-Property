@@ -1,0 +1,1016 @@
+          extractDigit()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   4
+Actual:     4
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   7
+Actual:     7
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   2
+Actual:     2
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+          setDigit()
+Test 1
+
+---------------------------------
+Expected:   30
+Actual:     30
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   13
+Actual:     13
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   24
+Actual:     24
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   106
+Actual:     106
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   93226
+Actual:     93226
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   5048
+Actual:     5048
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   100732
+Actual:     100732
+Status:     P
+
+             power()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   3
+Actual:     3
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   16
+Actual:     16
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   27
+Actual:     27
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   100000
+Actual:     100000
+Status:     P
+
+           isPrime()
+Test 1
+
+---------------------------------
+Expected:   -1
+Actual:     -1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+            bitcmp()
+Test 1
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+          initializePlayers()
+Test 1
+
+---------------------------------
+Expected:   00000000
+Actual:     00000000
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     0061FE7C
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     0061FE7C
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F16AC
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F1738
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F174C
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F1738
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F174C
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F1738
+Status:     P
+
+
+---------------------------------
+Expected:   Not 00000000
+Actual:     006F174C
+Status:     P
+
+          updateCash()
+Test 1
+
+---------------------------------
+Expected:   300
+Actual:     300
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   150
+Actual:     150
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   -100
+Actual:     -100
+Status:     P
+
+          isCashSufficient()
+Test 1
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          passesGo()
+Test 1
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+           setName()
+Test 1
+
+---------------------------------
+Expected:   d
+Actual:     d
+Status:     P
+
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   dan
+Actual:     dan
+Status:     P
+
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   daniel
+Actual:     daniel
+Status:     P
+
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   00000000
+Actual:     00000000
+Status:     P
+
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          getSpaceInfo()
+Test 1
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   2
+Actual:     2
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   4
+Actual:     4
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   8
+Actual:     8
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   16
+Actual:     16
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   144
+Actual:     144
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   32
+Actual:     32
+Status:     P
+
+Test 8
+
+---------------------------------
+Expected:   160
+Actual:     160
+Status:     P
+
+          isRenovated
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          isOwnedByBank()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+          isOwnedByPlayer()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 8
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 9
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+          updateInventory()
+Test 1
+
+---------------------------------
+Expected:   203
+Actual:     203
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   2102
+Actual:     2102
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   314010321
+Actual:     314010321
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   14010021
+Actual:     14010021
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   14010341
+Actual:     14010341
+Status:     P
+
+          getOwner()
+Test 1
+
+---------------------------------
+Expected:   -1
+Actual:     -1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          hasProprty()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 8
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 9
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          getTransactionType()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   2
+Actual:     2
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   3
+Actual:     3
+Status:     P
+
+          getNewDigit()
+Test 1
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   2
+Actual:     2
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   3
+Actual:     3
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   4
+Actual:     4
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   3
+Actual:     3
+Status:     P
+
+          getAmount()
+Test 1
+
+---------------------------------
+Expected:   150
+Actual:     150
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   100
+Actual:     100
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   20
+Actual:     20
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   100
+Actual:     100
+Status:     P
+
+Test 5
+
+---------------------------------
+Expected:   40
+Actual:     40
+Status:     P
+
+Test 6
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 7
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 8
+
+---------------------------------
+Expected:   50
+Actual:     50
+Status:     P
+
+Test 9
+
+---------------------------------
+Expected:   50
+Actual:     50
+Status:     P
+
+Test 10
+
+---------------------------------
+Expected:   50
+Actual:     50
+Status:     P
+
+Test 11
+
+---------------------------------
+Expected:   48
+Actual:     48
+Status:     P
+
+Test 12
+
+---------------------------------
+Expected:   35
+Actual:     35
+Status:     P
+
+Test 13
+
+---------------------------------
+Expected:   4
+Actual:     4
+Status:     P
+
+Test 14
+
+---------------------------------
+Expected:   41
+Actual:     41
+Status:     P
+
+Test 15
+
+---------------------------------
+Expected:   8
+Actual:     8
+Status:     P
+
+Test 16
+
+---------------------------------
+Expected:   75
+Actual:     75
+Status:     P
+
+Test 17
+
+---------------------------------
+Expected:   50
+Actual:     50
+Status:     P
+
+Test 18
+
+---------------------------------
+Expected:   10
+Actual:     10
+Status:     P
+
+Test 19
+
+---------------------------------
+Expected:   50
+Actual:     50
+Status:     P
+
+Test 20
+
+---------------------------------
+Expected:   20
+Actual:     20
+Status:     P
+
+          updateMovePlayer()
+Test 1
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   7
+Actual:     7
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   8
+Actual:     8
+Status:     P
+
+Test 4
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+          playByLuck()
+Test 1
+
+---------------------------------
+Expected:   4
+Actual:     4
+Status:     P
+
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+
+---------------------------------
+Expected:   0
+Actual:     0
+Status:     P
+
+Test 2
+
+---------------------------------
+Expected:   350
+Actual:     350
+Status:     P
+
+
+---------------------------------
+Expected:   1
+Actual:     1
+Status:     P
+
+Test 3
+
+---------------------------------
+Expected:   100
+Actual:     100
+Status:     P
+
+
+---------------------------------
+Expected:   2
+Actual:     2
+Status:     P
+

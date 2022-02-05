@@ -24,7 +24,7 @@ typedef struct position Position;
 
 #define INITIAL_CASH 200
 #define BANK_BONUS 50
-#define COST_MULTIPLIER 2
+#define COST_MULTIPLIER 1
 
 #define ADD 1
 #define SUBTRACT -1
@@ -40,6 +40,9 @@ typedef struct position Position;
     This function dynamically allocates memory to a player pointer based
     on the size specified and sets its attributes to their initial values
 
+    Pre-condition           *player does not point to NULL and size is
+                            non-negative
+
     @param  player          the pointer to the player pointer
     @param  size            the number of players to be allocated
     @return                 none
@@ -51,7 +54,7 @@ void initializePlayers(Player **player, int size);
     amount and operation
 
     Pre-condition:  operation is a macro-defined value of 1 for addition
-                    or -1 for subtraction
+                    or -1 for subtraction; player does not point to NULL
 
     @param  player          the pointer to the player being updated
     @param  amount          the amount being added or deducted
@@ -64,6 +67,8 @@ void updateCash(Player *player, int amount, int operation);
 /**
     This function checks whether the player has enough cash left based
     on the amount given in a transaction
+
+    Pre-condition           amount is a non-negative integer
 
     @param  cash            the amount of cash a player has
     @param  amount          the amount being deducted in a transaction
@@ -158,6 +163,8 @@ void setCanPlay(Player *player, int canPlay);
 
 /**
     This function sets the name of the player
+
+    Pre-condition           the name contains the null character in the end
 
     @param  player          the pointer to the player being checked
     @return                 1 if failed (name is too large); 0 if otherwise

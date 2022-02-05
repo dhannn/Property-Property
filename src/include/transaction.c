@@ -146,8 +146,11 @@ int getAmount(int spaceInfo, int position, int inventory, int dice) {
         return buyingCost * COST_MULTIPLIER;
     }
 
-    if(spaceInfo & PROPERTY_BY_PLAYER)
+    if(spaceInfo & PROPERTY_BY_PLAYER) {
+        if(position == ELECTRIC_COMPANY || position == RAILROAD)
+            return 0;
         return RENOVATION_COST * COST_MULTIPLIER;
+    }
 
     if(spaceInfo & PROPERTY_BY_OTHER) {
         if(position == ELECTRIC_COMPANY)
@@ -162,8 +165,15 @@ int getAmount(int spaceInfo, int position, int inventory, int dice) {
         return rentingCost * COST_MULTIPLIER;
     }
 
-    if(spaceInfo & PROPERTY_TO_SELL)
+    if(spaceInfo & PROPERTY_TO_SELL) {
+        if(position == ELECTRIC_COMPANY)
+            return ELECTRIC_COMPANY_BUYING_COST / 2;
+
+        if(position == RAILROAD)
+            return RAILROAD_BUYING_COST / 2;
+
         return buyingCost * COST_MULTIPLIER / 2;
+    }
 
     return -1;
 }

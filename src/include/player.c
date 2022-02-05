@@ -2,8 +2,8 @@
     Description         This file contains the implementation details of the
                         player.h module
     Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       26-01-2022
-    Version             3.0.0
+    Last modified       06-02-2022
+    Version             3.1.1
 */
 
 #include "player.h"
@@ -49,34 +49,22 @@ struct player {
 void initializePlayers(Player **player, int size) {
     int i;
 
-    *player = malloc(sizeof(Player) * size);
+    if(size > 0) {
+        *player = malloc(sizeof(Player) * size);
 
-    if(*player == NULL) {
-        raiseNullPointerError(
-            "Malloc of player pointer variable failed.",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    for(i = 0; i < size; i++) {
-        (*player)[i].canPlay = 1;
-        (*player)[i].position = initializeNewPosition(0);
-        (*player)[i].cash = INITIAL_CASH;
-        (*player)[i].index = i;
+        for(i = 0; i < size; i++) {
+            (*player)[i].canPlay = 1;
+            (*player)[i].position = initializeNewPosition(0);
+            (*player)[i].cash = INITIAL_CASH;
+            (*player)[i].index = i;
+            (*player)[i].name = NULL;
+        }
     }
 }
 
 void updateCash(Player *player, int amount, int operation) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
     // when operation is SUBTRACT (i.e. -1), the operation of
     // the equation turns to subtraction
-
     player->cash = player->cash + operation * amount;
 }
 
@@ -104,20 +92,6 @@ Player *nextPlayer(Player *player) {
 }
 
 int previousPosition(Player *player) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Position variable should not be null at this point",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
     // this is if the game just started; therefore, not having previous
     if(player->position->previous == NULL)
         return player->position->data;
@@ -131,114 +105,32 @@ void cleanPlayers(Player *player, int size) {
     for(i = 0; i < size; i++){
         deallocatePositions(player[i].position);
         free(player[i].name);
-        free(&player[i]);
     }
+    free(player);
 }
 
 /* -------------------------------------------------------------------------- */
 /*                   GETTERS AND SETTERS OF PLAYER STRUCTURE                  */
 /* -------------------------------------------------------------------------- */
 
-int getPosition(Player *player) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
+int getPosition(Player *player) { return player->position->data; }
 
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Position variable should not be null at this point",
-            __FILE__, __func__, __LINE__
-        );
-    }
+int getIndex(Player *player) { return player->index; }
 
-    return player->position->data;
-}
+int getCash(Player *player) { return player->cash; }
 
-int getIndex(Player *player) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
+int getCanPlay(Player *player) {  return player->canPlay; }
 
-    return player->index;
-}
-
-int getCash(Player *player) {
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    return player->cash;
-}
-
-int getCanPlay(Player *player) {
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    return player->canPlay;
-}
-
-char *getName(Player *player) {
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    return player->name;
-}
+char *getName(Player *player) { return player->name; }
 
 void setPosition(Player *player, int newPosition) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    if(player->position == NULL) {
-        raiseNullPointerError(
-            "Position variable should not be null at this point",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
     pushPosition(&(player->position), newPosition);
 }
 
-void setCanPlay(Player *player, int canPlay) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    player->canPlay = canPlay;
-}
+void setCanPlay(Player *player, int canPlay) { player->canPlay = canPlay; }
 
 int setName(Player *player, char *name) {
     int src_length = strlen(name);
-
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
 
     if(src_length > MAX_NAME_CHAR)
         return SET_NAME_FAILURE;
@@ -250,27 +142,9 @@ int setName(Player *player, char *name) {
     return SET_NAME_SUCCESS;
 }
 
-void setIndex(Player *player, int index) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
+void setIndex(Player *player, int index) { player->index = index; }
 
-    player->index = index;
-}
-
-void setCash(Player *player, int cash) {
-    if(player == NULL) {
-        raiseNullPointerError(
-            "Player variable should not be null",
-            __FILE__, __func__, __LINE__
-        );
-    }
-
-    player->cash = cash;
-}
+void setCash(Player *player, int cash) { player->cash = cash; }
 
 
 /* -------------------------------------------------------------------------- */

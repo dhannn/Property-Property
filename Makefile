@@ -3,15 +3,19 @@
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-7.2
 
 CFLAGS=-Wall -g
-CFLAGS_TEST=-Wall -c
+CFLAGS_TEST=
+
 BIN="[CCPROG1] MP - Monopoly.exe"
 SRC_DIR=src
 INCLUDE_DIR=include
 INCLUDES=$(wildcard $(SRC_DIR)/$(INCLUDE_DIR)/*.c)
+
 MAIN_SRC=$(SRC_DIR)/main.c
+
 TEST_DIR=test_scripts
-TEST_BINS=$(TEST_DIR)/test_player
 TESTS=$(wildcard $(TEST_DIR)/*.c)
+TEST_BINS=$(patsubst $(TEST_DIR)/%.c,$(TEST_DIR)/%.exe,$(TESTS))
+TEST_FRAMEWORK=$(wildcard $(TEST_DIR)/test_framework/*.c)
 
 all: $(BIN)
 
@@ -21,10 +25,17 @@ demo: $(BIN)
 $(BIN): $(INCLUDES)
 	gcc $(CFLAGS) $(INCLUDES) $(MAIN_SRC) -o $(BIN)
 
-clean:
+clean: del_bin del_test
+
+del_bin:
 	del $(BIN)
+
+del_test:
+	$(foreach test, $(TEST_BINS), rm $(test);)
 
 test: $(TEST_BINS)
 
-$(TEST_BINS): $(INCLUDES)
-	gcc $(CFLAGS_TEST) $^
+$(TEST_DIR)/%.exe: $(TEST_DIR)/%.c
+	gcc $(CFLAGS_TEST) $(INCLUDES) $< $(TEST_FRAMEWORK) -o $@
+	.\$@
+	echo "hi"

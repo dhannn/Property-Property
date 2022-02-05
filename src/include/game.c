@@ -131,6 +131,10 @@ void getFromBank(Game *game) {
     updateCash(game->activePlayer, BANK_BONUS, ADD);
 }
 
+int _rand(){
+    return 150;
+}
+
 int playByLuck(Game *game) {
     int dice = game->dice;
     Player *player = game->activePlayer;
@@ -143,13 +147,13 @@ int playByLuck(Game *game) {
     }
 
     if(isPrime(dice)) {
-        amount = rand() % GET_BANK_RANGE + GET_BANK_MIN;
+        amount = _rand() % GET_BANK_RANGE + GET_BANK_MIN;
         game->transaction.amount = amount;
         updateCash(player, amount, ADD);
 
         return LUCK_IS_GET_BANK;
     } else{
-        amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
+        amount = _rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
         game->transaction.amount = amount;
         updateCash(player, amount, SUBTRACT);
 

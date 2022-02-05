@@ -264,12 +264,6 @@ Point getOriginPlayerMarker(int position) {
     int row = getRowFromSpace(position);
     int column = getColumnFromSpace(position, row);
 
-
-    if(row == -1)
-        printf("Error");
-    if(column == -1)
-        printf("Error");
-
     Point origin;
 
 
@@ -516,34 +510,35 @@ int isValidInput(char *in, int validInputs, va_list args) {
     int flag;
     int bitMask;
     char keys[] = {PLAY_KEY, MENU_KEY, EXIT_KEY, ROLL_KEY, BUY_KEY, X_KEY,
-                    RENOVATE_KEY, PAY_KEY, SELL_KEY, SELL_KEY, CONTINUE_KEY};
+                    RENOVATE_KEY, PAY_KEY, SELL_KEY, SELL_KEY, SETTINGS_KEY, BACK_KEY};
 
     // variables for range
     int min, max;
     int isWithinRange;
     int isNumeric;
+    int isValid = 0;
 
     min = va_arg(args, int);
     max = va_arg(args, int);
     isNumeric = atoi(in) != 0;
     isWithinRange = atoi(in) >= min && atoi(in) <= max;
 
-    for(i = 0; i < 11; i++) {
+    for(i = 0; i < 12 || isValid; i++) {
         if(isNumeric && isWithinRange && (validInputs & RANGE)) {
             min = va_arg(args, int);
             max = va_arg(args, int);
 
-            return 1;
+            isValid = 1;
         }
 
         bitMask = power(2, i);
         flag = *in == keys[i] && (validInputs & bitMask);
 
         if(flag)
-            return 1;
+            isValid = 1;
     }
 
-    return 0;
+    return isValid;
 }
 
 void toUpper(char *in) {
