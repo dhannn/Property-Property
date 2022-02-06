@@ -1,14 +1,15 @@
 /*
+
     Description         This file contains the function prototypes where
                         game and display modules are combined
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       29-01-2022
-    Version             3.0.0
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include "game.h"
 #include "display.h"
-#define CONFIG_FILE "config"
 
 /**
     This function initializes the game, starts the game loop, displays
@@ -44,7 +45,10 @@ void playTurn(Game *game);
 void handleState(Game *game);
 
 /*
-    This function handles
+    This function handles the event that a player has insifficient cash
+
+    @param  game        the pointer to the game structure
+    @return             none
 */
 void handleInsufficientMoney(Game *game);
 
@@ -72,6 +76,9 @@ void updateScreenElements(Game game);
 */
 void displayWinner(Player *winner);
 
-void printMenu();
+/*
+    This function prints the current seed of the RNG for testing purposes
 
+    @param  seed        the seed of the random number generator of the game
+*/
 void printSeed(unsigned long seed);

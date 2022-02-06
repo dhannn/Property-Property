@@ -3,9 +3,9 @@
     Description         This header file contains functions prototypes
                         responsible for printing and displaying screen
                         elements to the console.
-    Programmed by       Daniel III L. Ramos
-    Last Modified       05-02-2022
-    Version             1.3.0
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
 
 
     Acknowledgements:
@@ -17,6 +17,7 @@
     https://en.cppreference.com/w/c/variadic
         This documentation helped me understand variadic functions such as
         printf() so I can implement my own input() and output()
+
 */
 
 #include <string.h>
@@ -63,6 +64,10 @@
 #define CARD_BOTTOM_BORDER 2
 #define LINE_LENGTH 6
 #define INPUT_STREAM_POSITION ((CARD_HEIGHT + 1) * 3 + 1)
+#define DICE_ORGIN_X 86
+#define DICE_ORGIN_Y 20
+#define GRID_GAP_X 2
+#define GRID_GAP_Y 1
 
 
 // These are macros that define ANSI escape sequences that help in displaying
@@ -76,8 +81,13 @@
 #define MOVE_DOWN "\033[%dB"
 #define MOVE_RIGHT "\033[%dC"
 #define MOVE_LEFT "\033[%dD"
+#define CLEAR_CURSOR "\033[?25l"
+#define UNCLEAR_CURSOR "\033[?25h"
+
 
 #define DEFAULT_DELAY 2500
+#define DELAY_FLICKER_ON 500
+#define DELAY_FLICKER_OFF 250
 
 // COLORS
 #define COLOR_TEMPLATE "\033[%d;%dm"
@@ -91,6 +101,8 @@
 #define TO_UPPER_INCREMENT 32
 #define LOWERCASE_START 97
 #define PESO "₱"
+
+#define IS_ERASE 1
 
 #ifndef DISPLAY_H
 #define DISPLAY_H

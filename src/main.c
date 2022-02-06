@@ -1,3 +1,13 @@
+/*
+
+    Description         This file contains the main function that calls
+                        the other module and serves as an entry point
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
+*/
+
 #include "include/display.h"
 #include "include/transaction.h"
 #include "include/engine.h"
@@ -27,6 +37,8 @@ int main(){
 
         printTitle((CARD_HEIGHT + 1) * 2 - 10);
         printOpeningScreen();
+        game.input = input("", PLAY | EXIT | MENU);
+        handleInput(&game);
     } while(game.input == PLAY_KEY);
 
     clear();

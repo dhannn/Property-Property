@@ -1,9 +1,11 @@
 /*
+
     Description         This file contains the function prototypes and other
                         structures involving standard transactions in the game
-    Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       01-02-2022
-    Version             3.1.0
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include "player.h"
@@ -54,7 +56,8 @@ enum space {
 };
 
 
-// This enum is used to determine how much cash is added or deducted in a transaction (in getAmount())
+// This enum is used to determine how much cash is
+// added or deducted in a transaction (in getAmount())
 enum transactionType{
     NULL_TRANSACTION,
     BUY_PROPERTY,
@@ -71,7 +74,6 @@ struct transaction{
     TransactionType transactionType;
     int amount;
     int newStatus;
-    // TODO: refactor code to include inventory in transaction struct
 };
 
 typedef struct transaction Transaction;

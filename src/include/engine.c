@@ -1,9 +1,11 @@
 /*
+
     Description         This file contains the implementation details
                         of the engine.h module
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       01-02-2022
-    Version             3.1.0
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include <stdio.h>
@@ -128,8 +130,6 @@ void handleInput(Game *game) {
             game->isBankrupt = -1;
             break;
         case MENU_KEY:
-            // printMenu();
-            // TODO: finish menu
             break;
     }
 }
@@ -152,7 +152,7 @@ void handleState(Game *game) {
     makeTransaction(game);
 
     switch(state) {
-        // <---------- Non-Transaction states -------->
+        /* -------------------- NON-TRANSACTION STATES -------------------- */
         case DO_NOTHING:
             output("Nothing to do here!");
             *in = 'X'; // reset input to do nothing
@@ -196,7 +196,7 @@ void handleState(Game *game) {
             *in = 'X'; // reset input to do nothing
             break;
 
-        // <---------- Transaction states -------->
+        /* --------------------- TRANSACTION STATES ---------------------- */
 
         case CAN_BUY:
             output(
@@ -270,7 +270,7 @@ void handleInsufficientMoney(Game *game) {
     do {
         *in = input(
             "Enter the position of the property chosen "
-            "(ex: 1 for Treehouse, ..., 9 for Igloo).",
+            "(1 for Treehouse, 2 for Electric Company, ..., 9 for Farmhouse).",
             DEFAULT | RANGE, 1, 9
         );
 
@@ -362,129 +362,3 @@ void printSeed(unsigned long seed) {
 
     fclose(file);
 }
-
-// void printMenu(Game *game) {
-//     clear();
-
-//     printf("Press the key of your choice\n");
-//     printf("\tSe[T]tings\n");
-//     printf("\t[E]xit\n");
-//     printf("\tBa[C]k\n");
-
-//     game->input = input("", SETTINGS | EXIT);
-//     handleInput(game);
-// }
-
-// void printSettings(Game *game) {
-//     char *in = &game->input;
-//     int setting;
-
-//     clear();
-//     printf("Press the number of the setting you want to change\n");
-//     printf("\t[1] Initial Cash\n");
-//     printf("\t[2] Cost Multiplier\n");
-//     printf("\t[3] Inflation?\n");
-//     printf("\t[4] Back\n");
-
-//     *in = input("", RANGE, 1, 4);
-//     clear();
-
-//     while(*in != 4) {
-//         if(*in == '1') {
-
-//             printf(
-//                 "Initial cash allows you to change how much money"
-//                 "the players have at the start of the game\n\n"
-//             );
-
-//             printf("Enter the inital cash you want.\n\t>> ");
-//             do
-//                 scanf("%d", &setting);
-//             while(setting <= 0);
-//         } else if(*in == '2') {
-//             printf(
-//                 "Cost multipliers raise the prices in the game"
-//                 "for ya'll who want to experience ✨l u x u r y✨"
-//             );
-
-//             printf("Enter cost multiplier you want.\n\t>> ");
-
-//             do
-//                 scanf("%d", &setting);
-//             while(setting <= 0);
-//         } else if(*in == '3') {
-//             printf(
-//                 "Want the realistic experience? Setting the inflation ON"
-//                 "will increase prices in every player's turn!"
-//             );
-
-//             printf("Enter 1 if you want inflation or 0 if not\n\t>> ");
-
-//             do
-//                 scanf("%d", &setting);
-//             while(setting != 1 && setting != 0);
-//         }
-
-//         changeSetting(game, atoi(in), setting);
-//     }
-
-//     printMenu(game);
-// }
-
-// void changeSetting(Game *game, int setting, int settingValue) {
-//     FILE *configFile = fopen(CONFIG_FILE, "r+");
-//     int tempSetting;
-//     int tempSettingValue;
-//     int flag = 1;
-
-//     while(fscanf(configFile, "%d %d", &tempSetting, &tempSettingValue) != EOF) {
-
-//         if(tempSetting == setting) {
-//             fseek(configFile, -1, SEEK_CUR);
-//             fprintf(configFile, "%d=%d", setting);
-//             flag = 0;
-//         }
-//     }
-
-//     // if the current setting is not seen in the file
-//     // (meaning the setting is originally set config by default)
-//     if(flag) {
-//         fprintf(configFile, "%d=%d", setting, settingValue);
-//     }
-
-//     fclose(configFile);
-// }
-
-// void loadConfig(Game *game) {
-//     FILE *configFile = open(CONFIG_FILE, "r");
-//     int setting;
-//     int settingValue;
-//     int i;
-
-//     game->config.initialCash = -1;
-//     game->config.costMultiplier = -1;
-//     game->config.hasInflation = -1;
-//     int *settingArr[3] = {
-//         &game->config.initialCash,
-//         &game->config.costMultiplier,
-//         &game->config.hasInflation
-//     };
-
-//     int defValues[3] = {
-//         INITIAL_CASH,
-//         COST_MULTIPLIER,
-//         0
-//     };
-
-//     while(fscanf(configFile, "%d %d", &setting, &settingValue) != EOF) {
-//         *settingArr[setting] = settingValue;
-//     }
-
-//     fclose(configFile);
-
-//     for(i = 0; i < 3; i++) {
-//         if(*settingArr[i] == -1) {
-//             *settingArr[i] = defValues[i];
-//         }
-//     }
-// }

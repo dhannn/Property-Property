@@ -1,12 +1,15 @@
 /*
+
     Description         This file contains the function prototypes and other
                         structures involving the game itself
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       05-02-2022
-    Version             3.1.0
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include "transaction.h"
+#include <stdint.h>
 
 #define MAX_PLAYERS 2
 #define LUCK_IS_JAIL 0
@@ -32,15 +35,6 @@ typedef enum {
 } State;
 
 
-struct config {
-    int initialCash;
-    int costMultiplier;
-    int hasInflation;
-};
-
-typedef struct config Config;
-
-
 // The game structure contains all the information related to the game
 struct game{
     Player *players;                // pointer to the players
@@ -52,7 +46,6 @@ struct game{
     int dice;                       // contains the current dice value
     char input;                     // shows the input from user
     long id;                        // the seed that represents the game
-    Config config;
 };
 
 typedef struct game Game;
@@ -63,6 +56,14 @@ typedef struct game Game;
 /* The following functions are always called in every turn                    */
 /* as they are constants in the main game loop                                */
 
+
+/**
+    This function uses a hash function to create a random seed
+
+    @return             a 32-bit random integer used as seed for RNG
+*/
+uint32_t initializeSeed();
+
 /**
     This function sets initial values to the members of the game structure
 
@@ -72,7 +73,7 @@ typedef struct game Game;
 void initializeGame(Game *game);
 
 /**
-    This function sets a random value from one to six and assigns it to the dice
+    This function sets a random value from 1 to 6 and assigns it to the dice
 
     @param  dice        the pointer to the dice
     @return             none
@@ -142,7 +143,8 @@ void getFromBank(Game *game);
     the dice value and returns an integer value about the outcome
 
     @param  game        the pointer to the game structure
-    @return             0 if go to jail; 1 if get from bank; 2 if pay the bank
+    @return             0 if go to jail; 1 if get from bank; 2 if pay the bank,
+                        has enough cash; 3 if pay the bank, not enough cash
 */
 int playByLuck(Game *game);
 

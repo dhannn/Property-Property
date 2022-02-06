@@ -1,9 +1,11 @@
 /*
+
     Description         This file contains the implementation details of the
                         transaction.h module
-    Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       01-02-2022
-    Version             3.1.0
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include "transaction.h"
@@ -64,7 +66,10 @@ int isOwnedByBank(int inventory, int position) {
 int isOwnedByPlayer(int inventory, int position, int playerIndex) {
     int property = extractDigit(inventory, position);
 
-    if(position == GO || position == JAIL_TIME || position == FEELIN_LUCKY || !property)
+    if(
+        position == GO || position == JAIL_TIME ||
+        position == FEELIN_LUCKY || !property
+    )
         return 0;
     return (property + playerIndex) % 2;
 }

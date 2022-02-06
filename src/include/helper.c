@@ -1,3 +1,13 @@
+/*
+
+    Description         This header file contains all the function prototypes
+                        of helper functions used in other modules.
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
+*/
+
 #include "helper.h"
 #include <math.h>
 

@@ -1,9 +1,18 @@
 /*
+
     Description         This file contains the implementation of functions
                         in the game.h module
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       05-02-2022
-    Version             3.1.0
+    Last Modified       06-02-2022
+    Version             3.5.0
+
+
+    Acknowledgements:
+    Wang, T. (2007). Integer Hash Function. http://web.archive.org/web/
+    20071223173210/http://www.concentric.net/~Ttwang/tech/inthash.htm
+        This article allowed me to create better random seed
+        by generating a hash function
+
 */
 
 #include "game.h"
@@ -13,6 +22,14 @@
 #include <stdint.h>
 
 uint32_t initializeSeed() {
+    // I decided to implement this hashing function stated by Thomas Wang
+    // and originally devised by Robert Jenkins to give me a completely random
+    // seed as the time(NULL) function call is not enough.
+
+    // When using time(NULL), the dice values are still close to each other.
+    // Wang explained more about hash functions and characteristics of a good
+    // hash functions on the short article stated above.
+
     uint32_t rand1 = time(NULL) ^ 2;
     uint32_t rand2 = rand1 + time(NULL) / 10;
     uint32_t key = time(NULL);

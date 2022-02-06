@@ -1,3 +1,24 @@
+/*
+
+    Description         This header file contains the implementations
+                        of the function protypes in the display.h module
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
+
+    Acknowledgements:
+    Peterson, Christian. 3 Nov 2021. ANSI Escape Sequences. Github gists
+    https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+        This Github gist lays out all the ANSI escape sequences I used.
+
+    Variadic functions. (n.d.). cppreferences.
+    https://en.cppreference.com/w/c/variadic
+        This documentation helped me understand variadic functions such as
+        printf() so I can implement my own input() and output()
+
+*/
+
 #include "display.h"
 #include "helper.h"
 #include <stdio.h>
@@ -44,7 +65,7 @@ void printSpaces() {
     int i, j;
     int originX;
     int originY;
-    int titleOrigin = (CARD_HEIGHT + 1) * 2 - 7;
+    int titleOrigin = (CARD_HEIGHT + GRID_GAP_Y) * 2 - 7;
     int numberOfProperties = 0;
 
     // HACK:    I specifically hardcoded the string values of each card
@@ -66,8 +87,8 @@ void printSpaces() {
             // we need to check for middle since this part
             // is reserved for the title screen
             if(!isMiddle) {
-                originX = (CARD_WIDTH + 2) * j + 1;
-                originY = (CARD_HEIGHT + 1) * i + 1;
+                originX = (CARD_WIDTH + GRID_GAP_X) * j + 1;
+                originY = (CARD_HEIGHT + GRID_GAP_Y) * i + 1;
 
                 createCard(
                     &card,
@@ -234,7 +255,7 @@ void printPlayer(int position, int index, int isErase) {
     else
         printf("[%d]", index + 1);
 
-    reposition((CARD_HEIGHT + 1) * 3 + 1, 1);
+    gotoInputStream();
 }
 
 void displayPlayerMove(int previousPosition, int currentPosition, int index) {
@@ -247,16 +268,16 @@ void displayPlayerMove(int previousPosition, int currentPosition, int index) {
 
     for(i = 0; i < positionDifference; i++) {
         // flickers on
-        printPlayer(previousPosition, index, 0);
-        delay(500); // TODO: extract constant
+        printPlayer(previousPosition, index, !IS_ERASE);
+        delay(DELAY_FLICKER_ON);
 
         // flickers off
-        printPlayer(previousPosition, index, 1); // TODO: make erase a constant/enum
-        delay(250);
+        printPlayer(previousPosition, index, IS_ERASE);
+        delay(DELAY_FLICKER_OFF);
         previousPosition = (previousPosition + 1) % 10;
     }
 
-    printPlayer(previousPosition, index, 0);
+    printPlayer(previousPosition, index, !IS_ERASE);
 }
 
 Point getOriginPlayerMarker(int position) {
@@ -267,9 +288,9 @@ Point getOriginPlayerMarker(int position) {
     Point origin;
 
 
-    origin.x = CARD_WIDTH + (CARD_WIDTH + 2) * 2 * column + 1;
+    origin.x = CARD_WIDTH + (CARD_WIDTH + GRID_GAP_X) * 2 * column + 1;
     origin.y = (CARD_HEIGHT + CARD_BORDER_SIZE - CARD_BOTTOM_BORDER) / 2
-                + (CARD_HEIGHT + 1) * row;
+                + (CARD_HEIGHT + GRID_GAP_Y) * row;
 
     return origin;
 }
@@ -311,7 +332,7 @@ void displayDiceRoll(int dice) {
     int randomDice;
     int i;
 
-    printf("\x1B[?25l"); // TODO: make this a constant
+    printf(CLEAR_CURSOR);
 
     // To give the illusion of rolling dice:
     for(i = 0; i < 4; i++) {
@@ -331,7 +352,7 @@ void displayDiceRoll(int dice) {
     }
 
     printDice(dice);
-    printf("\x1B[?25h");
+    printf(UNCLEAR_CURSOR);
 }
 
 void printDice(int dice) {
@@ -364,7 +385,7 @@ void printCash(float cash, int index, char *name) {
     reposition(origin.y + index, origin.x);
     printf("%s\t\t₱%.2f", name, cash);
 
-    reposition((CARD_HEIGHT + 1) * 3 + 1, 1);
+    gotoInputStream();
 }
 
 void printOwnership(int position, int index) {
@@ -389,8 +410,8 @@ Point getOriginPropertyMarker(int position) {
     int row = getRowFromSpace(position);
     int col = getColumnFromSpace(position, row);
     Point origin = {
-        (CARD_WIDTH + 2) * 2 * col + 3,
-        (CARD_HEIGHT + 1) * row + 2
+        (CARD_WIDTH + GRID_GAP_X) * 2 * col + 3,
+        (CARD_HEIGHT + GRID_GAP_Y) * row + 2
     };
 
     return origin;
@@ -509,8 +530,10 @@ int isValidInput(char *in, int validInputs, va_list args) {
     int i;
     int flag;
     int bitMask;
-    char keys[] = {PLAY_KEY, MENU_KEY, EXIT_KEY, ROLL_KEY, BUY_KEY, X_KEY,
-                    RENOVATE_KEY, PAY_KEY, SELL_KEY, SELL_KEY, SETTINGS_KEY, BACK_KEY};
+    char keys[] = {
+        PLAY_KEY, MENU_KEY, EXIT_KEY, ROLL_KEY, BUY_KEY, X_KEY,
+        RENOVATE_KEY, PAY_KEY, SELL_KEY, SELL_KEY, SETTINGS_KEY, BACK_KEY
+        };
 
     // variables for range
     int min, max;

@@ -1,9 +1,11 @@
 /*
+
     Description         This file contains the implementation details of the
                         player.h module
-    Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       06-02-2022
-    Version             3.1.1
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
+
 */
 
 #include "player.h"
@@ -106,6 +108,7 @@ void cleanPlayers(Player *player, int size) {
         deallocatePositions(player[i].position);
         free(player[i].name);
     }
+
     free(player);
 }
 

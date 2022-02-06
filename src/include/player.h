@@ -1,16 +1,19 @@
 /*
+
     Description         This file contains the function prototypes and other
                         structures involving the player
-    Programmed by       Daniel L. Ramos III (S15A)
-    Last modified       26-01-2022
-    Version             3.0.0
+    Programmed by       Daniel III L. Ramos (S15A)
+    Last Modified       06-02-2022
+    Version             3.5.0
 
-    Acknowledgements    Sorber, J. [Jacob Sorber]. (2021, April 06). Make
-                        your Data Type more Abstract with Opaque Types in C
-                        [Video]. YouTube.
-                        https://www.youtube.com/watch?v=TsUOhPsZk6k
 
-                        Helped me understand opaque types such as the FILE *
+    Acknowledgements
+    Sorber, J. [Jacob Sorber]. (2021, April 06). Make your Data Type
+    more Abstract with Opaque Types in C [Video]. YouTube.
+    https://www.youtube.com/watch?v=TsUOhPsZk6k
+        Helped me understand opaque types such as the FILE *
+        and why data encapsulation is important
+
 */
 
 #ifndef PLAYER_H
@@ -100,6 +103,13 @@ Player *nextPlayer(Player *player);
 */
 int previousPosition(Player *player);
 
+/**
+    This function cleans up memory allocated during runtime
+
+    @param  player          the pointer to the players
+    @param  siz             the number of players
+*/
+void cleanPlayers(Player *player, int size);
 
 /* -------------------------------------------------------------------------- */
 /*                   GETTERS AND SETTERS OF PLAYER STRUCTURE                  */
@@ -202,8 +212,4 @@ void pushPosition(Position **positionStack, int newPosition);
     @return                 none
 */
 void deallocatePositions(Position *positionStack);
-
-void cleanPlayers(Player *player, int size);
-
-
 #endif
