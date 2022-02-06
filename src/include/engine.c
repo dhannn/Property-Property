@@ -184,6 +184,7 @@ void handleState(Game *game) {
                     );
 
                     handleInsufficientMoney(game);
+                    updateCash(player, transaction->amount, SUBTRACT);
             }
 
             *in = 'X'; // reset input to do nothing

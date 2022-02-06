@@ -1,6 +1,7 @@
 [ x ] Selling bug (doesn't resell if said no to selling confirmation)
 [ ] Go bug (GO bonus doesnt reflect on the next)
 
+[ ] Update added functions
 [ ] Finish the TODO comments
 [ ] Fix header comments
 [ ] Make sure that every function has a function comment

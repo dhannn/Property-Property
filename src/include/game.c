@@ -198,20 +198,19 @@ int playByLuck(Game *game) {
         amount = rand() % GET_BANK_RANGE + GET_BANK_MIN;
         game->transaction.amount = amount;
 
-        if(isCashSufficient(getCash(player), amount)) {
-            updateCash(player, amount, ADD);
-            return LUCK_IS_GET_BANK;
-        } else {
-            return LUCK_IS_PAY_BANK_NO_CASH;
-        }
-
-    } else{
-        amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
-        game->transaction.amount = amount;
-        updateCash(player, amount, SUBTRACT);
-
-        return LUCK_IS_PAY_BANK;
+        updateCash(player, amount, ADD);
+        return LUCK_IS_GET_BANK;
     }
+
+    // if not prime
+    amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
+    game->transaction.amount = amount;
+
+    if(!isCashSufficient(getCash(player), amount))
+        return LUCK_IS_PAY_BANK_NO_CASH;
+
+    updateCash(player, amount, SUBTRACT);
+    return LUCK_IS_PAY_BANK;
 }
 
 void goToJail(Game *game) {
