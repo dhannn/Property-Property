@@ -2,7 +2,7 @@
     Description         This file contains the implementation of functions
                         in the game.h module
     Programmed by       Daniel III L. Ramos (S15A)
-    Last Modified       01-02-2022
+    Last Modified       05-02-2022
     Version             3.1.0
 */
 
@@ -10,6 +10,51 @@
 #include "helper.h"
 #include <stdlib.h>
 #include <time.h>
+#include <stdint.h>
+
+uint32_t initializeSeed() {
+    uint32_t rand1 = time(NULL) ^ 2;
+    uint32_t rand2 = rand1 + time(NULL) / 10;
+    uint32_t key = time(NULL);
+
+    rand1 = rand1 - rand2;
+    rand1 = rand1 - key;
+    rand1 = rand1 ^ (key >> 13);
+
+    rand2 = rand2 - key;
+    rand2 = rand2 - rand1;
+    rand2 = rand2 ^ (rand1 << 8);
+
+    key = key - rand1;
+    key = key - rand2;
+    key = key ^ (rand2 >> 13);
+
+    rand1 = rand1 - rand2;
+    rand1 = rand1 - key;
+    rand1 = rand1 ^ (key >> 12);
+
+    rand2 = rand2 - key;
+    rand2 = rand2 - rand1;
+    rand2 = rand2 ^ (rand1 << 16);
+
+    key = key - rand1;
+    key = key - rand2;
+    key = key ^ (rand2 >> 5);
+
+    rand1 = rand1 - rand2;
+    rand1 = rand1 - key;
+    rand1 = rand1 ^ (key >> 3);
+
+    rand2 = rand2 - key;
+    rand2 = rand2 - rand1;
+    rand2 = rand2 ^ (rand1 << 10);
+
+    key = key - rand1;
+    key = key - rand2;
+    key = key ^ (rand2 >> 15);
+
+    return key;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                            MAIN GAME OPERATIONS                            */
@@ -18,7 +63,9 @@
 /* as they are constants in the main game loop                                */
 
 void initializeGame(Game *game) {
-    srand(time(NULL));
+
+    game->id = initializeSeed();
+    srand(game->id);
 
     game->dice = 0;
     game->inventory = 0;
@@ -75,7 +122,8 @@ void updateState(Game *game) {
         *state = CANNOT_BUY;
     else if(bitcmp(spaceInfo, PROPERTY_BY_PLAYER) &&
             !bitcmp(spaceInfo, PROPERTY_IS_RENOVATED) &&
-            hasCash)
+            hasCash && position != ELECTRIC_COMPANY &&
+            position != RAILROAD)
         *state = CAN_RENOVATE;
     else if(bitcmp(spaceInfo, PROPERTY_BY_PLAYER) &&
             !bitcmp(spaceInfo, PROPERTY_IS_RENOVATED) &&
@@ -147,13 +195,18 @@ int playByLuck(Game *game) {
     }
 
     if(isPrime(dice)) {
-        amount = _rand() % GET_BANK_RANGE + GET_BANK_MIN;
+        amount = rand() % GET_BANK_RANGE + GET_BANK_MIN;
         game->transaction.amount = amount;
-        updateCash(player, amount, ADD);
 
-        return LUCK_IS_GET_BANK;
+        if(isCashSufficient(getCash(player), amount)) {
+            updateCash(player, amount, ADD);
+            return LUCK_IS_GET_BANK;
+        } else {
+            return LUCK_IS_PAY_BANK_NO_CASH;
+        }
+
     } else{
-        amount = _rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
+        amount = rand() % PAY_BANK_RANGE + PAY_BANK_MIN;
         game->transaction.amount = amount;
         updateCash(player, amount, SUBTRACT);
 

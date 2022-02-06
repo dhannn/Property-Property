@@ -73,3 +73,5 @@ void updateScreenElements(Game game);
 void displayWinner(Player *winner);
 
 void printMenu();
+
+void printSeed(unsigned long seed);

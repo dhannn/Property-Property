@@ -14,6 +14,10 @@
 void playGame(Game *game) {
     // sets up the game
     initializeGame(game);
+
+    // prints seed for testing
+    printSeed(game->id);
+
     getPlayerName(game->players);
     clear();
 
@@ -71,10 +75,12 @@ void playTurn(Game *game) {
     printSpaces();
     updateScreenElements(*game);
 
+    // only active if not in jail
     if(getCanPlay(activePlayer)) {
         *in = input("Press R to roll the dice.", ROLL | DEFAULT);
         handleInput(game);
 
+        // only true uf the user didn't attempt to exit
         if(*in != EXIT_KEY) {
             movePlayer(activePlayer, game->dice);
             current = getPosition(activePlayer);
@@ -88,6 +94,7 @@ void playTurn(Game *game) {
             updateScreenElements(*game);
         }
     } else {
+        // outcome when in jail
         setCanPlay(activePlayer, 1);
         output("Don't worry. You'll be released from prison next turn!");
     }
@@ -137,6 +144,7 @@ void handleState(Game *game) {
     if(passesGo(player)) {
         getFromBank(game);
         output("You got %p from the bank!", BANK_BONUS);
+
         updateState(game);
         updateScreenElements(*game);
     }
@@ -170,6 +178,12 @@ void handleState(Game *game) {
                         transaction->amount
                     );
                     break;
+                case LUCK_IS_PAY_BANK_NO_CASH:
+                    output(
+                        "Oh no! You have no cash to pay the bank."
+                    );
+
+                    handleInsufficientMoney(game);
             }
 
             *in = 'X'; // reset input to do nothing
@@ -250,12 +264,12 @@ void handleInsufficientMoney(Game *game) {
     int index = getIndex(player);
     int cash = getCash(player);
     int propertyToSell;
-    int flag;
+    int flag = 1;
 
     do {
         *in = input(
-            "Enter the position of the property chosen."
-            "(ex: 1 for Treehouse, ..., 9 for Igloo)",
+            "Enter the position of the property chosen "
+            "(ex: 1 for Treehouse, ..., 9 for Igloo).",
             DEFAULT | RANGE, 1, 9
         );
 
@@ -338,6 +352,14 @@ void updateScreenElements(Game game) {
 void displayWinner(Player *player) {
     clear();
     printf("Congrats, %s! You won.", getName(player));
+}
+
+void printSeed(unsigned long seed) {
+    FILE *file = fopen("seed", "a");
+
+    fprintf(file, "%lu\n", seed);
+
+    fclose(file);
 }
 
 // void printMenu(Game *game) {

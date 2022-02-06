@@ -5,7 +5,7 @@
                         elements to the console.
     Programmed by       Daniel III L. Ramos
     Last Modified       05-02-2022
-    Version             1.2.0
+    Version             1.3.0
 
 
     Acknowledgements:

@@ -12,6 +12,7 @@
 #define LUCK_IS_JAIL 0
 #define LUCK_IS_GET_BANK 1
 #define LUCK_IS_PAY_BANK 2
+#define LUCK_IS_PAY_BANK_NO_CASH 3
 
 #ifndef GAME_H
 #define GAME_H
@@ -50,6 +51,7 @@ struct game{
     int isBankrupt;                 // boolean
     int dice;                       // contains the current dice value
     char input;                     // shows the input from user
+    long id;                        // the seed that represents the game
     Config config;
 };
 

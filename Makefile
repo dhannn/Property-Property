@@ -22,8 +22,11 @@ all: $(BIN)
 demo: $(BIN)
 	.\$(BIN)
 
-$(BIN): $(INCLUDES)
+$(BIN):
 	gcc $(CFLAGS) $(INCLUDES) $(MAIN_SRC) -o $(BIN)
+
+$(SRC_DIR)/%.exe: $(SRC_DIR)/%.c
+	gcc $(CFLAGS_TEST) $(INCLUDES) $< $(TEST_FRAMEWORK) -o $@
 
 clean: del_bin del_test
 

@@ -523,7 +523,7 @@ int isValidInput(char *in, int validInputs, va_list args) {
     isNumeric = atoi(in) != 0;
     isWithinRange = atoi(in) >= min && atoi(in) <= max;
 
-    for(i = 0; i < 12 || isValid; i++) {
+    for(i = 0; i < 12 && !isValid; i++) {
         if(isNumeric && isWithinRange && (validInputs & RANGE)) {
             min = va_arg(args, int);
             max = va_arg(args, int);

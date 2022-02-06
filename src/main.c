@@ -14,14 +14,20 @@ int main(){
     delay(DEFAULT_DELAY * 2);
 
 
+    clear();
+
+    printTitle((CARD_HEIGHT + 1) * 2 - 10);
+    printOpeningScreen();
+
     do{
+        game.input = input("", PLAY | EXIT | MENU);
+        handleInput(&game);
+
         clear();
 
         printTitle((CARD_HEIGHT + 1) * 2 - 10);
         printOpeningScreen();
-        game.input = input("", PLAY | EXIT | MENU, 0);
-        handleInput(&game);
-    } while(game.input == PLAY);
+    } while(game.input == PLAY_KEY);
 
     clear();
     return 0;

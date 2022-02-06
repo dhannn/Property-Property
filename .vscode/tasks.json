@@ -3,12 +3,18 @@
         {
             "type": "cppbuild",
             "label": "C/C++: gcc.exe build active file",
-            "command": "make",
+            "command": "make all",
             "args": [
                 // "-fdiagnostics-color=always",
                 // "-g",
                 // "${file}",
-                // ,
+                // "${fileDirname}\\include\\display.c",
+                // "${fileDirname}\\include\\engine.c",
+                // "${fileDirname}\\include\\error.c",
+                // "${fileDirname}\\include\\game.c",
+                // "${fileDirname}\\include\\helper.c",
+                // "${fileDirname}\\include\\player.c",
+                // "${fileDirname}\\include\\transaction.c",
                 // "-o",
                 // "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

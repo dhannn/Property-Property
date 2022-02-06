@@ -23,8 +23,8 @@ typedef struct player Player;
 typedef struct position Position;
 
 #define INITIAL_CASH 200
-#define BANK_BONUS 50
-#define COST_MULTIPLIER 1
+#define BANK_BONUS 10
+#define COST_MULTIPLIER 1.5
 
 #define ADD 1
 #define SUBTRACT -1
