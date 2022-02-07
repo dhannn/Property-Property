@@ -13,8 +13,58 @@
 #include "engine.h"
 #include "helper.h"
 
+void printSeed(unsigned long seed) {
+    FILE *file = fopen("seed", "a");
+
+    fprintf(file, "%lu\n", seed);
+
+    fclose(file);
+}
+
+void loadConfig(Game *game) {
+    FILE *configFile = fopen(CONFIG_FILE, "r");
+    int setting;
+    float settingValue;
+    int i;
+
+    // initialize to -1 so that we know what values are missing later
+    game->config.initialCash = -1;
+    game->config.costMultiplier = -1;
+    game->config.hasInflation = -1;
+
+    float *settingArr[3] = {
+        &game->config.initialCash,
+        &game->config.costMultiplier,
+        &game->config.hasInflation
+    };
+
+
+    // XXX: While every setting in the game is actually an int, I decided
+    //      to make the configurations a float for the cost multiplier.
+    float defaultValues[3] = {
+        INITIAL_CASH,
+        COST_MULTIPLIER,
+        0
+    };
+
+    // reading the config file to set into the game configuration
+    while(fscanf(configFile, "%d %f", &setting, &settingValue) != EOF) {
+        *settingArr[setting - 1] = settingValue;
+    }
+
+    fclose(configFile);
+
+    // missing values are replaced with default values
+    for(i = 0; i < 3; i++) {
+        if(*settingArr[i] == -1) {
+            *settingArr[i] = defaultValues[i];
+        }
+    }
+}
+
 void playGame(Game *game) {
     // sets up the game
+    loadConfig(game);
     initializeGame(game);
 
     // prints seed for testing
@@ -33,7 +83,6 @@ void playGame(Game *game) {
     if(game->isBankrupt != -1)
         displayWinner(game->activePlayer);
 
-    delay(DEFAULT_DELAY);
     cleanGame(game);
 }
 
@@ -91,6 +140,7 @@ void playTurn(Game *game) {
 
             updateState(game);
             handleState(game);
+
             handleInput(game);
 
             updateScreenElements(*game);
@@ -102,6 +152,9 @@ void playTurn(Game *game) {
     }
 
     incrementTurn(&(game->players), &(game->activePlayer));
+
+    if(game->config.hasInflation && getIndex(activePlayer))
+        initiateInflation(game);
 }
 
 void handleInput(Game *game) {
@@ -130,6 +183,11 @@ void handleInput(Game *game) {
             game->isBankrupt = -1;
             break;
         case MENU_KEY:
+            printMenu(game);
+            break;
+        case SETTINGS_KEY:
+            break;
+        case BACK_KEY:
             break;
     }
 }
@@ -143,7 +201,10 @@ void handleState(Game *game) {
 
     if(passesGo(player)) {
         getFromBank(game);
-        output("You got %p from the bank!", BANK_BONUS);
+        output(
+            "You got %p from the bank!",
+            BANK_BONUS * (game->config.costMultiplier * 0.5)
+        );
 
         updateState(game);
         updateScreenElements(*game);
@@ -289,7 +350,10 @@ void handleInsufficientMoney(Game *game) {
         // lets player confirm this transaction based on the price
         output(
             "This property costs %p!",
-            getAmount(PROPERTY_TO_SELL, propertyToSell, *inventory, game->dice)
+            getAmount(
+                PROPERTY_TO_SELL, propertyToSell, *inventory,
+                game->dice, game->config.costMultiplier
+            )
         );
 
         *in = input(
@@ -353,12 +417,104 @@ void updateScreenElements(Game game) {
 void displayWinner(Player *player) {
     clear();
     printf("Congrats, %s! You won.", getName(player));
+
+    delay(DEFAULT_DELAY);
 }
 
-void printSeed(unsigned long seed) {
-    FILE *file = fopen("seed", "a");
+/* -------------------------------------------------------------------------- */
+/*                               MENU FUNCTIONS                               */
+/* -------------------------------------------------------------------------- */
 
-    fprintf(file, "%lu\n", seed);
+void printMenu(Game *game) {
+    char *in = &game->input;
+    float setting;
 
-    fclose(file);
+    while(*in != '5') {
+        clear();
+        // middle of the screen
+        reposition((CARD_HEIGHT + GRID_GAP_Y) * 2 - 7, 1);
+
+        printf("Press the number of the setting you want to change\n");
+        printf("  [1] Initial Cash\n");
+        printf("  [2] Cost Multiplier\n");
+        printf("  [3] Inflation?\n");
+        printf("  [4] Switch to default\n");
+        printf("  [5] Back\n");
+
+        *in = input("", RANGE, 1, 5);
+        clear();
+
+        // middle of the screen
+        reposition((CARD_HEIGHT + GRID_GAP_Y) * 2 - 7, 1);
+
+        if(*in == '1') {
+
+            printf(
+                "Initial cash allows you to change how much money "
+                "the players have at the start of the game\n\n"
+            );
+
+            printf("Enter the inital cash you want.\n  >> ");
+            do
+                scanf("%f", &setting);
+            while(setting <= 0);
+        } else if(*in == '2') {
+            printf(
+                "Cost multipliers raise the prices in the game "
+                "for ya'll who want to experience ✨l u x u r y✨\n\n"
+            );
+
+            printf("Enter cost multiplier you want.\n  >> ");
+
+            do
+                scanf("%f", &setting);
+            while(setting <= 0);
+        } else if(*in == '3') {
+            printf(
+                "Want the realistic experience? Setting the inflation ON "
+                "will increase prices in every player's turn!\n\n"
+            );
+
+            printf("Enter 1 if you want inflation or 0 if not\n  >> ");
+
+            do
+                scanf("%f", &setting);
+            while(setting != 1 && setting != 0);
+        }
+
+        if(*in == '4')
+            remove(CONFIG_FILE);
+        else if(*in != '5')
+            changeSetting(game, atoi(in), setting);
+    }
+}
+
+void changeSetting(Game *game, int setting, float settingValue) {
+    FILE *configFile = fopen(CONFIG_FILE, "r");
+    FILE *temp = fopen("temp", "w");
+
+    int tempSetting;
+    float tempSettingValue;
+    int flag = 1;
+
+    while(fscanf(configFile, "%d %f", &tempSetting, &tempSettingValue) != EOF) {
+        if(tempSetting == setting) {
+            fprintf(temp, "%d\t%f\n", setting, settingValue);
+            flag = 0;
+        } else {
+            fprintf(temp, "%d\t%f\n", tempSetting, tempSettingValue);
+        }
+    }
+
+    // if the current setting is not seen in the file
+    // (meaning the setting is originally set config by default)
+    if(flag) {
+        fprintf(temp, "%d\t%f\n", setting, settingValue);
+    }
+
+    fclose(configFile);
+    fclose(temp);
+
+    remove(CONFIG_FILE);
+    rename("temp", CONFIG_FILE);
 }

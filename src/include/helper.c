@@ -45,6 +45,8 @@ int isPrime(int number) {
     // https://primes.utm.edu/glossary/page.php?sort=TrialDivision
 
     int divisor = 2;
+    int flag = 1;       // to determine if prime
+    int isDone = 0;   // to stop the loop without using return
 
     if(number == 1)
         return NUM_IS_ONE;
@@ -52,14 +54,16 @@ int isPrime(int number) {
     // we only check divisors less than the square root of a number
     // since any factors above the square root has corresponding factor-pair
     // below the square root; thus checking below the root is sufficient
-    while(divisor <= sqrt(number)) {
-        if(number % divisor == 0)
-            return 0; // means there exists a divisible number other than 1 or itself
+    while(divisor <= sqrt(number) && !isDone) {
+        if(number % divisor == 0){
+            flag = 0; // means there exists a divisible number other than 1 or itself
+            isDone = 1;
+        }
 
         divisor++;
     }
 
-    return 1; // means that there exists no divisble number other than 1 or itself
+    return flag;
 }
 
 int bitcmp(int bitfield, int flag) {

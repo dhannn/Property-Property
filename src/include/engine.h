@@ -11,6 +11,23 @@
 #include "game.h"
 #include "display.h"
 
+
+/**
+    This function prints the current seed of the RNG for testing purposes
+
+    @param  seed        the seed of the random number generator of the game
+*/
+void printSeed(unsigned long seed);
+
+
+/**
+    This function loads the configurations in the config file if there are any.
+    If a setting is not found, the default setting will be loaded
+
+    @param  game        the pointer to the game structure
+*/
+void loadConfig(Game *game);
+
 /**
     This function initializes the game, starts the game loop, displays
     the winner and cleans up the dynamically-allocated variables
@@ -76,9 +93,26 @@ void updateScreenElements(Game game);
 */
 void displayWinner(Player *winner);
 
-/*
-    This function prints the current seed of the RNG for testing purposes
 
-    @param  seed        the seed of the random number generator of the game
+/* -------------------------------------------------------------------------- */
+/*                               MENU FUNCTIONS                               */
+/* -------------------------------------------------------------------------- */
+
+
+/**
+    This function prints the menu and prompts the user to pick one
+    of the following settings: Initial Cash, Cost Multiplier, Inflation and
+    Set Back to Default.
+
+    @param  game        the pointer to the game structure
 */
-void printSeed(unsigned long seed);
+void printMenu(Game *game);
+
+/**
+    This function changes the setting once the user tries to change it
+
+    @param game         the pointer to the game structure
+    @param setting      an integer index referring to a setting
+    @param settingValue the value of the setting
+*/
+void changeSetting(Game *game, int setting, float settingValue);

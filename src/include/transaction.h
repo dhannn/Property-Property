@@ -198,7 +198,7 @@ int getNewDigit(Player *player, int inventory, TransactionType transactionType);
     @param  dice            the value of the dice in the game
     @return                 the amount in the transaction
 */
-int getAmount(int spaceInfo, int position, int inventory, int dice);
+int getAmount(int spaceInfo, int position, int inventory, int dice, float mult);
 
 /*
     This function performs the transaction in a turn

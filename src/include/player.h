@@ -26,8 +26,8 @@ typedef struct player Player;
 typedef struct position Position;
 
 #define INITIAL_CASH 200
-#define BANK_BONUS 10
-#define COST_MULTIPLIER 1.5
+#define BANK_BONUS 200
+#define COST_MULTIPLIER 1
 
 #define ADD 1
 #define SUBTRACT -1
@@ -50,7 +50,7 @@ typedef struct position Position;
     @param  size            the number of players to be allocated
     @return                 none
 */
-void initializePlayers(Player **player, int size);
+void initializePlayers(Player **player, int size, int initialCash);
 
 /**
     This function updates the cash of the player based on the specified

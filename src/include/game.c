@@ -88,7 +88,7 @@ void initializeGame(Game *game) {
     game->inventory = 0;
     game->isBankrupt = 0;
 
-    initializePlayers(&(game->players), MAX_PLAYERS);
+    initializePlayers(&(game->players), MAX_PLAYERS, game->config.initialCash);
 
     // calling the players pointer returns the pointer of first player
     game->activePlayer = game->players;
@@ -112,6 +112,7 @@ void movePlayer(Player *activePlayer, int dice) {
 void updateState(Game *game) {
     Player *player = game->activePlayer;
     State *state = &(game->state);
+    Config config = game->config;
 
     int position = getPosition(player);
     int inventory = game->inventory;
@@ -119,7 +120,9 @@ void updateState(Game *game) {
 
     int spaceInfo = getSpaceInfo(player, inventory);
 
-    int amount = getAmount(spaceInfo, position, inventory, dice);
+    int amount = getAmount(
+        spaceInfo, position, inventory,
+        dice, config.costMultiplier);
     int cash = getCash(player);
     int hasCash = isCashSufficient(cash, amount);
 
@@ -158,6 +161,7 @@ void makeTransaction(Game *game) {
     Player *player = game->activePlayer;
     int inventory = game->inventory;
     Transaction *transaction = &(game->transaction);
+    Config config = game->config;
     int spaceInfo = getSpaceInfo(player, inventory);
 
     transaction->transactionType = getTransactionType(spaceInfo);
@@ -170,7 +174,8 @@ void makeTransaction(Game *game) {
         spaceInfo,
         getPosition(player),
         game->inventory,
-        game->dice
+        game->dice,
+        config.costMultiplier
     );
 }
 
@@ -178,11 +183,15 @@ void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer) {
     *activePlayer = nextPlayer(*activePlayer);
 }
 
-void cleanGame(Game *game) {
-    int i;
+void initiateInflation(Game *game) {
+    if(game->config.costMultiplier < 3)
+        game->config.costMultiplier *= 1.1;
+    else
+        game->config.costMultiplier += 0.1;
+}
 
-    for(i = 0; i < MAX_PLAYERS; i++)
-        cleanPlayers(game->players, MAX_PLAYERS);
+void cleanGame(Game *game) {
+    cleanPlayers(game->players, MAX_PLAYERS);
 }
 
 
@@ -193,7 +202,11 @@ void cleanGame(Game *game) {
 /* as they are outcomes that depend on specific positions (e.g. jail)         */
 
 void getFromBank(Game *game) {
-    updateCash(game->activePlayer, BANK_BONUS, ADD);
+    updateCash(
+        game->activePlayer,
+        BANK_BONUS * (game->config.costMultiplier * 0.5),
+        ADD
+    );
 }
 
 int _rand(){
@@ -238,10 +251,13 @@ void goToJail(Game *game) {
 
 void sellProperty(Game *game, int propertyToSell) {
     Player *player = game->activePlayer;
+    Config config = game->config;
+
     int *inventory = &(game->inventory);
     int dice = game->dice;
     int amount = getAmount(
-        PROPERTY_TO_SELL, propertyToSell, *inventory, dice
+        PROPERTY_TO_SELL, propertyToSell, *inventory, dice,
+        config.costMultiplier
     );
 
 

@@ -29,17 +29,19 @@ int main(){
     printTitle((CARD_HEIGHT + 1) * 2 - 10);
     printOpeningScreen();
 
-    do{
-        game.input = input("", PLAY | EXIT | MENU);
-        handleInput(&game);
+    game.input = input("", PLAY | EXIT | MENU);
+    handleInput(&game);
 
+    while(game.input != EXIT_KEY) {
         clear();
 
         printTitle((CARD_HEIGHT + 1) * 2 - 10);
         printOpeningScreen();
         game.input = input("", PLAY | EXIT | MENU);
-        handleInput(&game);
-    } while(game.input == PLAY_KEY);
+
+        if(game.input != EXIT_KEY)
+            handleInput(&game);
+    }
 
     clear();
     return 0;

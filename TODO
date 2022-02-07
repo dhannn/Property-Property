@@ -1,24 +1,26 @@
 [ x ] Selling bug (doesn't resell if said no to selling confirmation)
 [ ] Go bug (GO bonus doesnt reflect on the next)
 
-[ x ] Update added functions
-[ x ] Finish the TODO comments
-[ x ] Fix header comments
-[ x ] Make sure that every function has a function comment
-[ x ] Make sure that no line goes further than 80 columns
-[ ] Remove error.c/error.h and other unnecessary fluff
-[ ] Check loops to see if no returns
+[x] Update added functions
+[x] Finish the TODO comments
+[x] Fix header comments
+[x] Make sure that every function has a function comment
+[x] Make sure that no line goes further than 80 columns
+[x] Remove error.c/error.h and other unnecessary fluff
+[x] Check loops to see if no returns
 
 
 ----------------------------
 
+[]
+
 [ ] Play testing
 [ ] Check for seeds while testing
-[ ] Finish config
+[ x ] Finish config
 [ ] Finish documentation
 
 
 ---------------------------------
-[ ] Update added functions
-[ ] Make sure that every function has a function comment
-[ ] Make sure that no line goes further than 80 columns
+[ x ] Update added functions
+[x] Make sure that every function has a function comment
+[x] Make sure that no line goes further than 80 columns

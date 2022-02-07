@@ -137,47 +137,47 @@ int getNewDigit(Player *player, int inventory, TransactionType transactionType) 
     return status;
 }
 
-int getAmount(int spaceInfo, int position, int inventory, int dice) {
+int getAmount(int spaceInfo, int position, int inventory, int dice, float mult) {
     int buyingCost = 20.0 * (position % 7);
     int rentingCost = (1.0/5.0) * buyingCost;
 
 
     if(spaceInfo & PROPERTY_BY_BANK) {
         if(position == ELECTRIC_COMPANY)
-            return ELECTRIC_COMPANY_BUYING_COST * COST_MULTIPLIER;
+            return ELECTRIC_COMPANY_BUYING_COST * mult;
         if(position == RAILROAD)
-            return RAILROAD_BUYING_COST * COST_MULTIPLIER;
+            return RAILROAD_BUYING_COST * mult;
 
-        return buyingCost * COST_MULTIPLIER;
+        return buyingCost * mult;
     }
 
     if(spaceInfo & PROPERTY_BY_PLAYER) {
         if(position == ELECTRIC_COMPANY || position == RAILROAD)
             return 0;
-        return RENOVATION_COST * COST_MULTIPLIER;
+        return RENOVATION_COST * mult;
     }
 
     if(spaceInfo & PROPERTY_BY_OTHER) {
         if(position == ELECTRIC_COMPANY)
-            return 8 * dice * COST_MULTIPLIER;
+            return 8 * dice * mult;
 
         if(position == RAILROAD)
-            return RAILROAD_RENTING_COST * COST_MULTIPLIER;
+            return RAILROAD_RENTING_COST * mult;
 
         if(spaceInfo & PROPERTY_IS_RENOVATED)
             rentingCost = 1 + 2 * rentingCost;
 
-        return rentingCost * COST_MULTIPLIER;
+        return rentingCost * mult;
     }
 
     if(spaceInfo & PROPERTY_TO_SELL) {
         if(position == ELECTRIC_COMPANY)
-            return ELECTRIC_COMPANY_BUYING_COST / 2;
+            return ELECTRIC_COMPANY_BUYING_COST * mult / 2;
 
         if(position == RAILROAD)
-            return RAILROAD_BUYING_COST / 2;
+            return RAILROAD_BUYING_COST * mult / 2;
 
-        return buyingCost * COST_MULTIPLIER / 2;
+        return buyingCost * mult / 2;
     }
 
     return -1;

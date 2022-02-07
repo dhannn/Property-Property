@@ -107,7 +107,7 @@ void printSpaces() {
 
     printTitle(titleOrigin);
     reposition(titleOrigin + 4, (CARD_WIDTH + 2) * 2 + 2);
-    printf("Press M for menu, E to exit");
+    printf("Press E to exit");
 }
 
 /* --------------------------------- Spaces --------------------------------- */

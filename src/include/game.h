@@ -17,6 +17,8 @@
 #define LUCK_IS_PAY_BANK 2
 #define LUCK_IS_PAY_BANK_NO_CASH 3
 
+#define CONFIG_FILE "config"
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -35,6 +37,16 @@ typedef enum {
 } State;
 
 
+// The config structure deals with the settings of the game
+struct config {
+    float initialCash;
+    float costMultiplier;
+    float hasInflation;
+};
+
+typedef struct config Config;
+
+
 // The game structure contains all the information related to the game
 struct game{
     Player *players;                // pointer to the players
@@ -45,6 +57,7 @@ struct game{
     int isBankrupt;                 // boolean
     int dice;                       // contains the current dice value
     char input;                     // shows the input from user
+    Config config;
     long id;                        // the seed that represents the game
 };
 
@@ -114,6 +127,8 @@ void makeTransaction(Game *game);
     @return             none
 */
 void incrementTurn(Player *player[MAX_PLAYERS], Player **activePlayer);
+
+void initiateInflation(Game *game);
 
 /**
     This function deallocates dynamically-allocated memory set in

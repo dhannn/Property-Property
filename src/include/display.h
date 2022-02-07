@@ -149,7 +149,7 @@ enum input{
     RANGE       =   0b001000000000,  // indicates numerical value within a range
     SETTINGS    =   0b010000000000,
     BACK        =   0b100000000000,
-    DEFAULT     =   MENU | EXIT     // to access menu and exit any time
+    DEFAULT     =   EXIT             // to access menu and exit any time
 };
 
 

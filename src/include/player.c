@@ -9,7 +9,6 @@
 */
 
 #include "player.h"
-#include "error.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -48,7 +47,7 @@ struct player {
 /*               MAJOR OPERATIONS INVOLVING THE PLAYER STRUCTURE              */
 /* -------------------------------------------------------------------------- */
 
-void initializePlayers(Player **player, int size) {
+void initializePlayers(Player **player, int size, int initialCash) {
     int i;
 
     if(size > 0) {
@@ -57,7 +56,7 @@ void initializePlayers(Player **player, int size) {
         for(i = 0; i < size; i++) {
             (*player)[i].canPlay = 1;
             (*player)[i].position = initializeNewPosition(0);
-            (*player)[i].cash = INITIAL_CASH;
+            (*player)[i].cash = initialCash;
             (*player)[i].index = i;
             (*player)[i].name = NULL;
         }
@@ -174,7 +173,6 @@ void pushPosition(Position **positions, int newPosition) {
 }
 
 void deallocatePositions(Position *positionStack) {
-
     // recursively goes to the previous members to deallocate each nodes
     if(positionStack->previous != NULL) {
         deallocatePositions(positionStack->previous);
